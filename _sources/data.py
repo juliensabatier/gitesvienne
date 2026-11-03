@@ -218,7 +218,7 @@ DOMAINES = [
     "formule": "2 nuits minimum, location surtout le week-end",
     "options": [],
     "unite": "le week-end",
-    "photos": [("elinas-01","Cuisine ouverte et salle à manger"),("elinas-02","Le salon, son billard et son piano"),("elinas-03","Vue sur le viaduc de Lusignan"),
+    "photos": [("elinas-01","Cuisine ouverte et salle à manger"),("elinas-02","Le salon, son billard et son piano"),("elinas-10","La piscine chauffée et la terrasse"),
                ("elinas-04","La chambre violette"),("elinas-05","Chambre sous les poutres"),("elinas-06","Chambre à la girafe"),
                ("elinas-07","La salle de fitness"),("elinas-08","Le baby-foot"),("elinas-09","Salle de bain avec douche et baignoire")],
   },

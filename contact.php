@@ -31,6 +31,7 @@ $DOMAINES = [
 
 function fail($msg, $code = 400) { http_response_code($code); echo json_encode(['ok' => false, 'error' => $msg]); exit; }
 function clean($k, $max = 200) { return trim(mb_substr(str_replace(["\r", "\n"], ' ', (string)($_POST[$k] ?? '')), 0, $max)); }
+function journal($t) { @file_put_contents(__DIR__ . '/cache/contact.log', date('Y-m-d H:i:s') . " $t\n", FILE_APPEND | LOCK_EX); }
 function enc($s) { return '=?UTF-8?B?' . base64_encode($s) . '?='; }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') fail('Méthode non autorisée', 405);
@@ -66,9 +67,11 @@ $body = "Nouvelle demande depuis gitesvienne.fr\n\nDomaine : $domNom\nType : $ty
       . "Nom : $nom\nE-mail : $email\nTéléphone : " . ($tel ?: '-') . "\n\nMessage :\n" . ($message ?: '-') . "\n\n"
       . (($objet === 'visite' ? $AUTO_VISITE : $AUTO_DATE) ? "(Un e-mail de présentation a été envoyé automatiquement au client.)\n" : '');
 $sujet = ($objet === 'visite' ? 'Visite' : 'Demande') . " $domNom" . ($objet === 'date' && $arr ? ' du ' . $fr($arr) : '') . " - $nom";
-$headers = "From: Gîtes Vienne <$FROM>\r\nReply-To: " . enc($nom) . " <$email>\r\nMIME-Version: 1.0\r\n"
-         . "Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n";
-if (!@mail($DEST, enc($sujet), $body, $headers, '-f' . $FROM)) fail("L'envoi a échoué.", 500);
+$headers = "From: " . enc('Gîtes Vienne') . " <$FROM>\r\nReply-To: " . enc($nom) . " <$email>\r\nMIME-Version: 1.0\r\n"
+         . "Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: quoted-printable\r\n";
+$ok1 = @mail($DEST, enc($sujet), quoted_printable_encode($body), $headers, '-f' . $FROM);
+journal("demande $objet $dom -> $DEST : " . ($ok1 ? 'ok' : 'ECHEC'));
+if (!$ok1) fail("L'envoi a échoué.", 500);
 
 /* ---------- 2. Présentation envoyée au visiteur ---------- */
 if (($objet === 'visite' && $AUTO_VISITE) || ($objet === 'date' && $AUTO_DATE)) {
@@ -94,9 +97,10 @@ if (($objet === 'visite' && $AUTO_VISITE) || ($objet === 'date' && $AUTO_DATE)) 
         $sujetC = "Votre demande " . ($D ? $D['le'] : 'à nos domaines');
     }
     $corps .= $SIGNATURE . "\n";
-    $hC = "From: Julien Sabatier - Gîtes Vienne <$FROM>\r\nReply-To: $FROM\r\nAuto-Submitted: auto-replied\r\nMIME-Version: 1.0\r\n"
-        . "Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n";
-    @mail($email, enc($sujetC), $corps, $hC, '-f' . $FROM);
+    $hC = "From: " . enc('Julien Sabatier, Gîtes Vienne') . " <$FROM>\r\nReply-To: $FROM\r\nAuto-Submitted: auto-replied\r\nMIME-Version: 1.0\r\n"
+        . "Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: quoted-printable\r\n";
+    $ok2 = @mail($email, enc($sujetC), quoted_printable_encode($corps), $hC, '-f' . $FROM);
+    journal("presentation -> $email : " . ($ok2 ? 'ok' : 'ECHEC'));
 }
 
 echo json_encode(['ok' => true]);

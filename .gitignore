@@ -1,3 +1,4 @@
 cache/*.json
 cache/rl_*
 __pycache__/
+*.log

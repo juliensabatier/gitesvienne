@@ -176,7 +176,7 @@ js_data = {
 }
 
 tpl = open(os.path.join(os.path.dirname(__file__), "template.html"), encoding="utf-8").read()
-title = "Gîtes Vienne" if PREVIEW else "Gîtes Vienne · Domaines de mariage et gîtes près du Futuroscope"
+title = "Gîtes Vienne" if PREVIEW else "Gîtes Vienne · Domaines de mariage et gîtes de groupe dans la Vienne (86)"
 out = (tpl.replace("%%TITLE%%", title)
           .replace("%%CARDS_MARIAGE%%", "".join(card(d) for d in DOMAINES if d["famille"] == "mariage"))
           .replace("%%CARDS_GITE%%", "".join(card(d) for d in DOMAINES if d["famille"] == "gite"))

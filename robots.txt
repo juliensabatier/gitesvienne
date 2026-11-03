@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /cache/
+Disallow: /_sources/
+Sitemap: https://gitesvienne.fr/sitemap.xml

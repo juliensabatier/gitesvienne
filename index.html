@@ -63,10 +63,10 @@ p{margin:0}
 /* Ouverture */
 .hero{position:relative;color:#fff;background:#24303A;overflow:hidden}
 .slides{position:absolute;inset:0;margin:0;padding:0;list-style:none}
-.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
 .slide.on{opacity:1}
 .slide img{width:100%;height:100%;object-fit:cover;transform:scale(1.02)}
-.slide.on img{animation:zoom 8s ease-out forwards}
+.slide.on img{animation:zoom 5s ease-out forwards}
 @keyframes zoom{from{transform:scale(1.02)}to{transform:scale(1.09)}}
 .hero__nav{position:absolute;z-index:2;right:max(16px,env(safe-area-inset-right,0px));bottom:16px;display:flex;align-items:center;gap:14px}
 .hero__cap{color:#fff;text-decoration:none;font-size:13px;letter-spacing:.04em;opacity:.92}
@@ -886,7 +886,7 @@ function go(i){
   $$("button", dots).forEach((b, k) => b.setAttribute("aria-current", String(k === cur)));
   const nx = slides[(cur + 1) % slides.length].querySelector("img"); if (nx.dataset.src) { nx.src = nx.dataset.src; nx.removeAttribute("data-src"); }
 }
-function restart(){ clearInterval(timer); if (!still) timer = setInterval(() => go(cur + 1), 6000); }
+function restart(){ clearInterval(timer); if (!still) timer = setInterval(() => go(cur + 1), 3500); }
 go(0); restart();
 const hero = $(".hero"); hero.addEventListener("mouseenter", () => clearInterval(timer)); hero.addEventListener("mouseleave", restart);
 document.addEventListener("visibilitychange", () => document.hidden ? clearInterval(timer) : restart());

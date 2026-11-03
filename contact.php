@@ -67,6 +67,23 @@ $body = "Nouvelle demande depuis gitesvienne.fr\n\nDomaine : $domNom\nType : $ty
       . "Nom : $nom\nE-mail : $email\nTéléphone : " . ($tel ?: '-') . "\n\nMessage :\n" . ($message ?: '-') . "\n\n"
       . (($objet === 'visite' ? $AUTO_VISITE : $AUTO_DATE) ? "(Un e-mail de présentation a été envoyé automatiquement au client.)\n" : '');
 $sujet = ($objet === 'visite' ? 'Visite' : 'Demande') . " $domNom" . ($objet === 'date' && $arr ? ' du ' . $fr($arr) : '') . " - $nom";
+/* ---------- Envoi principal : Brevo via Make (domaine authentifié, e-mails signés) ---------- */
+$auto = ($objet === 'visite') ? $AUTO_VISITE : $AUTO_DATE;
+$payload = ['cle' => 'gv-7Rk2pQx9', 'objet' => $objet, 'domaine' => $dom, 'nom' => $nom, 'email' => $email,
+            'notif_sujet' => $sujet, 'notif_texte' => $body, 'presentation' => $auto ? 'oui' : 'non'];
+$okMake = false;
+if (function_exists('curl_init')) {
+    $ch = curl_init('https://hook.eu1.make.com/mirb58ifkyinqffw2iarovve3gcv83ad');
+    curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 10,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'], CURLOPT_POSTFIELDS => json_encode($payload)]);
+    curl_exec($ch);
+    $okMake = curl_getinfo($ch, CURLINFO_HTTP_CODE) === 200;
+    curl_close($ch);
+}
+journal("make $objet $dom $email : " . ($okMake ? 'ok' : 'ECHEC, envoi direct'));
+if ($okMake) { echo json_encode(['ok' => true]); exit; }
+
+/* ---------- Secours : envoi direct par le serveur ---------- */
 $headers = "From: " . enc('Gîtes Vienne') . " <$FROM>\r\nReply-To: " . enc($nom) . " <$email>\r\nMIME-Version: 1.0\r\n"
          . "Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: quoted-printable\r\n";
 $ok1 = @mail($DEST, enc($sujet), quoted_printable_encode($body), $headers, '-f' . $FROM);

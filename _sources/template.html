@@ -630,7 +630,6 @@ function go(i){
 }
 function restart(){ clearInterval(timer); if (!still) timer = setInterval(() => go(cur + 1), 3500); }
 go(0); restart();
-const hero = $(".hero"); hero.addEventListener("mouseenter", () => clearInterval(timer)); hero.addEventListener("mouseleave", restart);
 document.addEventListener("visibilitychange", () => document.hidden ? clearInterval(timer) : restart());
 })();
 </script>

@@ -1,0 +1,44 @@
+SITE GITESVIENNE.FR : MISE EN LIGNE SUR OVH (hébergement Perso)
+=================================================================
+
+CONTENU DU ZIP
+  www/        -> tout ce qui doit aller sur l'hébergement
+  sources/    -> fichiers de travail (textes, tarifs, générateur). NE PAS envoyer sur OVH.
+
+1. ENVOYER LES FICHIERS
+   - Espace client OVH > Web Cloud > Hébergements > gitesvienne.fr > onglet « FTP - SSH ».
+     Notez le serveur FTP, l'identifiant, et définissez un mot de passe si besoin.
+   - Installez FileZilla (gratuit), connectez-vous avec ces informations.
+   - Ouvrez le dossier « www » côté serveur. Supprimez la page d'attente OVH (index.html ou default_index.html).
+   - Glissez TOUT le contenu du dossier www/ du zip (index.html, ical.php, contact.php, .htaccess, img/, video/, plaquettes/, cache/)
+     dans le dossier www du serveur. Le fichier .htaccess est caché : dans FileZilla, menu Serveur > Forcer l'affichage des fichiers cachés.
+
+2. VÉRIFIER
+   - Ouvrez https://gitesvienne.fr (activez le certificat SSL gratuit dans l'onglet « Multisite » si le cadenas n'apparaît pas).
+   - Ouvrez https://gitesvienne.fr/ical.php : vous devez voir une ligne de texte qui commence par {"updated".
+     Sous le calendrier du site, la mention devient « Mis à jour automatiquement depuis le planning des domaines ».
+   - Envoyez-vous une demande test avec le formulaire : elle arrive sur contact@gitesvienne.fr
+     (donc dans votre Outlook grâce à la redirection).
+
+3. LE CALENDRIER
+   - Il se met à jour tout seul : ical.php relit Amenitiz au plus toutes les heures.
+   - Pour changer un lien Amenitiz : ouvrez ical.php avec un éditeur de texte (Bloc-notes), modifiez la ligne du domaine,
+     renvoyez le fichier, puis supprimez cache/ical.json sur le serveur.
+   - Attribution des liens validée : Persine 9c1706b6, Montbeil 6c78fb44, Borderie 283979e1, Mélior 2ea51c1a, Elinas b491cb0c.
+
+4. LE FORMULAIRE ET L'E-MAIL AUTOMATIQUE
+   - Deux choix pour le visiteur : « Réserver une date » ou « Visiter un domaine ».
+   - Chaque demande vous arrive sur contact@gitesvienne.fr, et le visiteur reçoit aussitôt un e-mail de présentation
+     du domaine signé Julien Sabatier, avec le lien vers la plaquette (domaines de mariage) ou vers la fiche (gîtes).
+   - Pour couper l'e-mail automatique : dans contact.php, passez $AUTO_VISITE ou $AUTO_DATE à false.
+   - Les textes de ces e-mails sont dans contact.php (partie « Présentation envoyée au visiteur »).
+   - Il utilise la fonction d'envoi d'e-mails de l'hébergement OVH, depuis contact@gitesvienne.fr.
+   - Si les messages n'arrivent pas : vérifiez que l'adresse contact@gitesvienne.fr existe bien dans l'onglet « E-mails »
+     d'OVH (et pas seulement comme redirection Brevo), et regardez dans les indésirables.
+
+5. LES PLAQUETTES
+   - Elles sont dans www/plaquettes/. Pour en changer une, remplacez le PDF en gardant exactement le même nom de fichier.
+
+6. MODIFIER UN TEXTE OU UN TARIF
+   - Tous les textes et tarifs sont dans sources/build/data.py.
+   - Le plus simple : demandez-moi la modification, je vous renvoie un index.html à jour à remplacer sur le serveur.

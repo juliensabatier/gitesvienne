@@ -21,6 +21,35 @@ MAPS = {
     "elinas":   "Villa Elinas, 86600 Lusignan",
 }
 
+# Avis Google (extraits relevés le 03/11/2026 sur les fiches Google de chaque domaine)
+AVIS = {
+  "persine": {"note": "4,9", "nb": 61, "cid": "15266615184325557735", "extraits": [
+    ("Bilitis M.", "Mariage, mai 2026", "Un grand merci à Erwan pour son professionnalisme, sa gentillesse, ses précieux conseils et sa réactivité. Nous avons eu un immense coup de cœur pour ce domaine où nous nous sommes sentis immédiatement bien. Notre mariage y a été tout simplement incroyable et restera un souvenir inoubliable."),
+    ("Jérôme G.", "Mariage, juin 2025", "Erwan et son équipe nous ont permis de réaliser le mariage de nos rêves en étant très flexibles et aux petits soins avec nous. Le domaine est sublime. La capacité de couchage est parfaite."),
+    ("Ildiko D.", "Anniversaire, décembre 2025", "Nous avons loué le Domaine de Persine pour fêter l’anniversaire de mon conjoint et tout était absolument parfait ! Le lieu est magnifique, très bien entretenu et offre un cadre idyllique pour célébrer un événement spécial."),
+  ]},
+  "montbeil": {"note": "5,0", "nb": 71, "cid": "10603852060669505702", "extraits": [
+    ("Claire P.", "Mariage, avril 2026", "Nous avons célébré notre mariage au château de Montbeil et tout était absolument parfait. Notre contact Erwan a toujours été à l’écoute et de bon conseil."),
+    ("Axelle D.", "Mariage, juin 2026", "Nous avons célébré notre mariage dans ce domaine absolument magnifique, et le mot est faible. Dès l'arrivée, le charme opère. Chaque pièce possède sa propre atmosphère, ce qui a totalement subjugué nos invités."),
+    ("Laëti B.", "Week-end en famille, avril 2026", "Week-end absolument magique au château de Montbeil ! Un moment inoubliable en famille."),
+  ]},
+  "borderie": {"note": "4,7", "nb": 106, "cid": "6121021280733075338", "extraits": [
+    ("Clément S.", "Mariage, juillet 2026", "Magnifique domaine dans lequel on est assuré de passer un agréable séjour. Nous l'avons loué pour un week-end de mariage et tout s'est très bien passé, sans parler de la gentillesse et du professionnalisme avec lesquels Erwan a pu nous accompagner avant et pendant notre mariage. Je recommande à 100% !"),
+    ("Manu M., photographe", "Mariage, septembre 2025", "J'ai eu la chance de photographier un mariage au Château de la Borderie : ce lieu est superbe ! Le château en lui-même et ses dépendances sont magnifiques, et que dire du parc avec la lumière incroyable qui y tombe en fin de journée...!!"),
+    ("Françoise", "Fête de famille, décembre 2024", "Nous avons passé un super séjour au château les 21 et 22 décembre 2024 ; les 40 convives ont pu apprécié à sa juste valeur la qualité du site de réception et ses hébergements."),
+  ]},
+  "melior": {"note": "4,9", "nb": 27, "cid": "17475271891860752454", "extraits": [
+    ("Sylvie F.", "Week-end en famille, novembre 2024", "A l'occasion d'un long week-end familial nous avons été totalement séduits par le gîte. Accueil remarquablement attentionné, une grande propreté et un équipement très complet. De plus le gîte est très bien situé dans un village charmant. Merci pour tout."),
+    ("François C.", "Mai 2024", "Magnifique demeure très bien équipée. Grandes chambres avec dressing, très bonne literie et les lits sont déjà faits à votre arrivée ! Grandes salles de bain (baignoire et douche) avec serviettes fournies ! Lieu reposant et détente assurée ! Je recommande !"),
+    ("Frédéric R.", "Vacances, août 2023", "Nous avons passé une semaine de vacances très reposante dans un gîte très fonctionnel, bien équipé et rénové avec goût. Parfait pour notre groupe de 12 personnes avec un jardin et piscine agréable qui offre une vue sur la vallée."),
+  ]},
+  "elinas": {"note": "4,9", "nb": 32, "cid": "18314508989955872147", "extraits": [
+    ("Nadine B.", "Mai 2026", "Maison magnifique, très spacieuse, très bien décorée et au coeur du village. Erwan est au petit soin avec ses hotes et très reactif. Je recommande les yeux fermés"),
+    ("Karine K.", "Week-end en famille, mai 2026", "Nous avons passé un long weekend en famille dans le gîte. Il est magnifique, les chambres sont très grandes, les équipements sont vraiment top! Le propriétaire est très arrangeant et disponible."),
+    ("Léa P.", "Anniversaire, octobre 2024", "J'ai fêté mes 25 ans dans ce merveilleux gîte et nous avons passé un super week-end !"),
+  ]},
+}
+
 PLAQUETTES = {
     "persine":  "plaquettes/plaquette-domaine-de-persine.pdf",
     "montbeil": "plaquettes/plaquette-chateau-de-montbeil.pdf",

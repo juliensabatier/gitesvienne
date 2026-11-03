@@ -46,6 +46,31 @@ def maps_url(slug):
 def iti_card(d):
     return f'<a class="iti" href="{maps_url(d["slug"])}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>Itinéraire depuis chez moi</a>'
 
+def avis_url(slug):
+    return "https://maps.google.com/?cid=" + AVIS[slug]["cid"]
+STAR = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z"/></svg>'
+def stars():
+    return '<span class="stars" aria-hidden="true">' + STAR*5 + '</span>'
+def avis_cards(slug, n=3):
+    a = AVIS[slug]
+    return "".join(f'''<figure class="avis__item"><blockquote>« {E(t)} »</blockquote>
+      <figcaption><b>{E(nom)}</b><span>{E(ctx)}</span></figcaption></figure>''' for nom, ctx, t in a["extraits"][:n])
+def avis_fiche(d):
+    a = AVIS[d["slug"]]
+    return f'''<section class="avis avis--fiche" aria-labelledby="av-{d['slug']}">
+      <div class="avis__head"><div><p class="eyebrow">Avis clients</p><h3 id="av-{d['slug']}">Ils nous ont fait confiance</h3></div>
+      <a class="avis__score" href="{avis_url(d['slug'])}" target="_blank" rel="noopener">{stars()}<b>{a['note']}/5</b><span>{a['nb']} avis Google ↗</span></a></div>
+      <div class="avis__grid">{avis_cards(d['slug'])}</div></section>'''
+def avis_home():
+    out = []
+    for d in DOMAINES:
+        a = AVIS[d["slug"]]
+        nom, ctx, t = a["extraits"][0]
+        out.append(f'''<article class="avis__dom"><a class="avis__score" href="{avis_url(d['slug'])}" target="_blank" rel="noopener">{stars()}<b>{a['note']}/5</b><span>{a['nb']} avis ↗</span></a>
+          <h3><a href="#{d['slug']}">{E(d['nom'])}</a></h3><blockquote>« {E(t)} »</blockquote><p class="avis__who"><b>{E(nom)}</b> · {E(ctx)}</p></article>''')
+    total = sum(AVIS[k]["nb"] for k in AVIS)
+    return "".join(out), total
+
 def plaq_card(d):
     p = PLAQUETTES.get(d["slug"])
     if not p: return ""
@@ -131,6 +156,7 @@ def fiche(d):
       <a class="btn btn--block" href="#contact" data-ask="{d['slug']}" data-mode="date">Demander une date</a>
     </aside>
   </div>
+  <div class="wrap fiche__avis">{avis_fiche(d)}</div>
   <div class="wrap fiche__cons">{conseiller(d['slug'])}</div>
 </section>'''
 
@@ -159,7 +185,7 @@ out = (tpl.replace("%%TITLE%%", title)
           .replace("%%CHIPS%%", "".join(f'<button type="button" class="chip chip--{d["famille"]}" data-chip="{d["slug"]}" aria-pressed="false">{E(d["court"])}</button>' for d in DOMAINES))
           .replace("%%LINKS%%", "".join(f'<li><a href="{d["site"]}" target="_blank" rel="noopener">{E(d["nom"])}</a></li>' for d in DOMAINES))
           .replace("%%EMAIL%%", CONTACT_EMAIL).replace("%%PHONE%%", PHONE).replace("%%PHONE_INTL%%", PHONE_INTL)
-          .replace("%%JSONLD%%", jsonld()).replace("%%CONSEILLER%%", conseiller(compact=True)).replace("%%SLIDES%%", slides())
+          .replace("%%JSONLD%%", jsonld()).replace("%%CONSEILLER%%", conseiller(compact=True)).replace("%%SLIDES%%", slides()).replace("%%AVIS_HOME%%", avis_home()[0]).replace("%%AVIS_TOTAL%%", str(avis_home()[1]))
           .replace("%%DATA%%", json.dumps(js_data, ensure_ascii=False)))
 if PREVIEW:
     out = out.replace('<!--HEAD-->', '<meta name="claude:viewport-fit-sides" content="cover">').replace("<!--BODY-->", "")

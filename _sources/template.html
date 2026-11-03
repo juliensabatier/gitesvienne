@@ -267,6 +267,30 @@ footer a:hover{color:var(--ink)}
 footer .logo b{font-size:26px;color:var(--ink)}
 @media (max-width:760px){footer .wrap{grid-template-columns:1fr}}
 body.lock{overflow:hidden}
+.avis-home{padding-top:0}
+.avis-home .section__head h2 i{color:var(--gold)}
+.avis__doms{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+@media (max-width:1100px){.avis__doms{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.avis__doms{grid-template-columns:1fr}}
+.avis__dom{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.avis__dom h3{font-size:20px}
+.avis__dom h3 a{text-decoration:none}
+.avis__dom blockquote,.avis__item blockquote{margin:0;font-size:15px;line-height:1.55;color:var(--ink)}
+.avis__who{font-size:13px;color:var(--muted);margin-top:auto}
+.avis__score{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);flex-wrap:wrap}
+.avis__score b{font:600 18px/1 var(--f-body)}
+.avis__score span{font-size:13px;color:var(--accent);font-weight:600}
+.stars,.avis__score .stars{display:inline-flex;gap:1px;color:#D9A21B}
+.stars svg path{fill:#D9A21B}
+.fiche__avis{padding-block:0 32px}
+.avis--fiche{display:grid;gap:20px}
+.avis__head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.avis__head h3{font-size:30px;font-weight:500}
+.avis__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.avis__grid{grid-template-columns:1fr}}
+.avis__item{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:12px}
+.avis__item figcaption{display:grid;gap:2px;font-size:13px;margin-top:auto}
+.avis__item figcaption span{color:var(--muted)}
 .card__lieu--row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .iti{display:inline-flex;align-items:center;gap:5px;font:600 12px/1 var(--f-body);letter-spacing:0;text-transform:none;color:var(--accent);text-decoration:none;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--bg)}
 .iti:hover{border-color:var(--accent)}
@@ -311,7 +335,7 @@ body.lock{overflow:hidden}
   <div class="wrap">
     <a class="logo" href="#accueil"><b>Gîtes Vienne</b><span>Lusignan · Poitou</span></a>
     <nav class="nav" aria-label="Navigation principale">
-      <a href="#mariages">Mariages</a><a href="#week-ends">Week-ends</a><a href="#disponibilites">Disponibilités</a><a href="#contact" data-ask="" data-mode="visite">Visiter</a><a class="nav__cta" href="#contact" data-ask="" data-mode="date">Demander une date</a>
+      <a href="#mariages">Mariages</a><a href="#week-ends">Week-ends</a><a href="#avis">Avis</a><a href="#disponibilites">Disponibilités</a><a href="#contact" data-ask="" data-mode="visite">Visiter</a><a class="nav__cta" href="#contact" data-ask="" data-mode="date">Demander une date</a>
     </nav>
   </div>
 </header>
@@ -352,6 +376,16 @@ body.lock{overflow:hidden}
       <p>Pour une fête de famille, un week-end entre amis ou deux jours au Futuroscope : le Clos de Mélior et la Villa d'Elinas se trouvent à deux minutes du domaine de Persine, dans le bourg médiéval.</p>
     </div>
     <div class="cards cards--2">%%CARDS_GITE%%</div>
+  </div>
+</section>
+
+<section class="section avis-home" id="avis">
+  <div class="wrap">
+    <div class="section__head">
+      <div><p class="eyebrow mark" style="color:var(--gold)">Avis clients</p><h2>La meilleure publicité, <i>ce sont nos clients</i></h2></div>
+      <p>Mariés, familles, amis : ils nous ont fait confiance et nous les en remercions chaleureusement. Voici quelques-uns des %%AVIS_TOTAL%% avis laissés sur Google, à lire en entier sur la fiche de chaque domaine.</p>
+    </div>
+    <div class="avis__doms">%%AVIS_HOME%%</div>
   </div>
 </section>
 

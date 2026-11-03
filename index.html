@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..600;1,400..600&family=Instrument+Sans:wght@400;500;600&display=swap">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "LodgingBusiness", "name": "Domaine de Persine", "description": "L'ancien bistrot du village, restauré dans un esprit chic et champêtre, avec son parc clos d'un hectare.", "address": {"@type": "PostalAddress", "streetAddress": "3 rue de la Roche Grolleau, 86600 Lusignan", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#persine", "image": "https://gitesvienne.fr/img/persine-card.jpg", "priceRange": "à partir de 2700 €"}, {"@type": "LodgingBusiness", "name": "Château de Montbeil", "description": "Un ancien relais de chasse entièrement rénové en 2020, son escalier romantique et son parc à kiosque.", "address": {"@type": "PostalAddress", "streetAddress": "9 lieu-dit Montbeil, 86470 Boivre-la-Vallée", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#montbeil", "image": "https://gitesvienne.fr/img/montbeil-card.jpg", "priceRange": "à partir de 2700 €"}, {"@type": "LodgingBusiness", "name": "Château de la Borderie", "description": "Un château privatisé au cœur d'un parc de 19 hectares, avec sa piscine, son gîte et ses chalets.", "address": {"@type": "PostalAddress", "streetAddress": "Château de la Borderie, Charente", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#borderie", "image": "https://gitesvienne.fr/img/borderie-card.jpg", "priceRange": "à partir de 6380 €"}, {"@type": "LodgingBusiness", "name": "Le Clos de Mélior", "description": "Une demeure du XVe siècle sur les hauteurs de Lusignan, sa grande cheminée et sa piscine chauffée.", "address": {"@type": "PostalAddress", "streetAddress": "Bourg médiéval de Lusignan, 86600", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#melior", "image": "https://gitesvienne.fr/img/melior-card.jpg", "priceRange": "à partir de 600 €"}, {"@type": "LodgingBusiness", "name": "La Villa d'Elinas", "description": "Une grande maison de famille avec piscine chauffée, billard, baby-foot et salle de fitness.", "address": {"@type": "PostalAddress", "streetAddress": "Hauteurs de Lusignan, 86600", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#elinas", "image": "https://gitesvienne.fr/img/elinas-card.jpg", "priceRange": "à partir de 800 €"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "LodgingBusiness", "name": "Domaine de Persine", "description": "L'ancien bistrot du village, restauré dans un esprit chic et champêtre, avec son parc clos d'un hectare.", "address": {"@type": "PostalAddress", "streetAddress": "3 rue de la Roche Grolleau, 86600 Lusignan", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#persine", "image": "https://gitesvienne.fr/img/persine-card.jpg", "priceRange": "à partir de 2700 €"}, {"@type": "LodgingBusiness", "name": "Château de Montbeil", "description": "Un ancien relais de chasse entièrement rénové en 2020, son escalier romantique et son parc à kiosque.", "address": {"@type": "PostalAddress", "streetAddress": "9 lieu-dit Montbeil, 86470 Boivre-la-Vallée", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#montbeil", "image": "https://gitesvienne.fr/img/montbeil-card.jpg", "priceRange": "à partir de 2700 €"}, {"@type": "LodgingBusiness", "name": "Château de la Borderie", "description": "Un château privatisé au cœur d'un parc de 19 hectares, avec sa piscine, son gîte et ses chalets.", "address": {"@type": "PostalAddress", "streetAddress": "Château de la Borderie, 16350 Benest", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#borderie", "image": "https://gitesvienne.fr/img/borderie-card.jpg", "priceRange": "à partir de 6380 €"}, {"@type": "LodgingBusiness", "name": "Le Clos de Mélior", "description": "Une demeure du XVe siècle sur les hauteurs de Lusignan, sa grande cheminée et sa piscine chauffée.", "address": {"@type": "PostalAddress", "streetAddress": "Bourg médiéval de Lusignan, 86600", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#melior", "image": "https://gitesvienne.fr/img/melior-card.jpg", "priceRange": "à partir de 600 €"}, {"@type": "LodgingBusiness", "name": "La Villa d'Elinas", "description": "Une grande maison de famille avec piscine chauffée, billard, baby-foot et salle de fitness.", "address": {"@type": "PostalAddress", "streetAddress": "Hauteurs de Lusignan, 86600", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#elinas", "image": "https://gitesvienne.fr/img/elinas-card.jpg", "priceRange": "à partir de 800 €"}]}</script>
 <style>
 /* Mise en page : ouverture vidéo sur Lusignan, puis deux familles (mariages en or, week-ends en vert sauge), un calendrier commun, des fiches plein écran. */
 :root{
@@ -273,6 +273,9 @@ footer a:hover{color:var(--ink)}
 footer .logo b{font-size:26px;color:var(--ink)}
 @media (max-width:760px){footer .wrap{grid-template-columns:1fr}}
 body.lock{overflow:hidden}
+.card__lieu--row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.iti{display:inline-flex;align-items:center;gap:5px;font:600 12px/1 var(--f-body);letter-spacing:0;text-transform:none;color:var(--accent);text-decoration:none;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--bg)}
+.iti:hover{border-color:var(--accent)}
 /* Chiffres : police de texte, bien lisible */
 .reperes b,.chiffres b,.prix b,.tarifs td,.devis .total{font-family:var(--f-body)!important;font-weight:600!important;letter-spacing:-.01em}
 .reperes b{font-size:24px}.chiffres b{font-size:19px}.chiffres--lg b{font-size:26px}.prix b{font-size:20px}.devis .total{font-size:28px}
@@ -352,7 +355,7 @@ body.lock{overflow:hidden}
     <img src="img/persine-card-s.jpg" srcset="img/persine-card-s.jpg 720w, img/persine-card.jpg 1600w" sizes="(max-width: 700px) 100vw, 50vw" alt="Domaine de Persine" loading="lazy" width="720" height="480">
   </a>
   <div class="card__body">
-    <p class="card__lieu">Lusignan (86)</p>
+    <p class="card__lieu card__lieu--row"><span>Lusignan (86)</span><a class="iti" href="https://www.google.com/maps/dir/?api=1&destination=Domaine%20de%20Persine%2C%203%20rue%20de%20la%20Roche%20Grolleau%2C%2086600%20Lusignan" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>Itinéraire depuis chez moi</a></p>
     <h3 class="card__nom"><a href="#persine">Domaine de Persine</a></h3>
     <p class="card__accroche">L&#x27;ancien bistrot du village, restauré dans un esprit chic et champêtre, avec son parc clos d&#x27;un hectare.</p>
     <ul class="chiffres"><li><b>130</b><span>convives assis</span></li><li><b>40</b><span>couchages</span></li><li><b>180 m²</b><span>salle climatisée</span></li><li><b>1 ha</b><span>parc clos</span></li></ul>
@@ -370,7 +373,7 @@ body.lock{overflow:hidden}
     <img src="img/montbeil-card-s.jpg" srcset="img/montbeil-card-s.jpg 720w, img/montbeil-card.jpg 1600w" sizes="(max-width: 700px) 100vw, 50vw" alt="Château de Montbeil" loading="lazy" width="720" height="480">
   </a>
   <div class="card__body">
-    <p class="card__lieu">Boivre-la-Vallée (86)</p>
+    <p class="card__lieu card__lieu--row"><span>Boivre-la-Vallée (86)</span><a class="iti" href="https://www.google.com/maps/dir/?api=1&destination=Ch%C3%A2teau%20de%20Montbeil%2C%209%20lieu-dit%20Montbeil%2C%2086470%20Boivre-la-Vall%C3%A9e" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>Itinéraire depuis chez moi</a></p>
     <h3 class="card__nom"><a href="#montbeil">Château de Montbeil</a></h3>
     <p class="card__accroche">Un ancien relais de chasse entièrement rénové en 2020, son escalier romantique et son parc à kiosque.</p>
     <ul class="chiffres"><li><b>80</b><span>convives assis</span></li><li><b>49</b><span>couchages</span></li><li><b>750 m²</b><span>habitables</span></li><li><b>5 000 m²</b><span>de parc</span></li></ul>
@@ -388,7 +391,7 @@ body.lock{overflow:hidden}
     <img src="img/borderie-card-s.jpg" srcset="img/borderie-card-s.jpg 720w, img/borderie-card.jpg 1600w" sizes="(max-width: 700px) 100vw, 50vw" alt="Château de la Borderie" loading="lazy" width="720" height="480">
   </a>
   <div class="card__body">
-    <p class="card__lieu">Charente (16)</p>
+    <p class="card__lieu card__lieu--row"><span>Benest, Charente (16)</span><a class="iti" href="https://www.google.com/maps/dir/?api=1&destination=Ch%C3%A2teau%20de%20la%20Borderie%2C%2016350%20Benest" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>Itinéraire depuis chez moi</a></p>
     <h3 class="card__nom"><a href="#borderie">Château de la Borderie</a></h3>
     <p class="card__accroche">Un château privatisé au cœur d&#x27;un parc de 19 hectares, avec sa piscine, son gîte et ses chalets.</p>
     <ul class="chiffres"><li><b>120</b><span>convives assis</span></li><li><b>96</b><span>couchages</span></li><li><b>140 m²</b><span>salle de réception</span></li><li><b>19 ha</b><span>de parc</span></li></ul>
@@ -416,7 +419,7 @@ body.lock{overflow:hidden}
     <img src="img/melior-card-s.jpg" srcset="img/melior-card-s.jpg 720w, img/melior-card.jpg 1600w" sizes="(max-width: 700px) 100vw, 50vw" alt="Le Clos de Mélior" loading="lazy" width="720" height="480">
   </a>
   <div class="card__body">
-    <p class="card__lieu">Lusignan (86)</p>
+    <p class="card__lieu card__lieu--row"><span>Lusignan (86)</span><a class="iti" href="https://www.google.com/maps/dir/?api=1&destination=Le%20Clos%20de%20M%C3%A9lior%2C%2086600%20Lusignan" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>Itinéraire depuis chez moi</a></p>
     <h3 class="card__nom"><a href="#melior">Le Clos de Mélior</a></h3>
     <p class="card__accroche">Une demeure du XVe siècle sur les hauteurs de Lusignan, sa grande cheminée et sa piscine chauffée.</p>
     <ul class="chiffres"><li><b>12</b><span>couchages</span></li><li><b>4</b><span>chambres</span></li><li><b>chauffée</b><span>piscine</span></li><li><b>20 min</b><span>du Futuroscope</span></li></ul>
@@ -434,7 +437,7 @@ body.lock{overflow:hidden}
     <img src="img/elinas-card-s.jpg" srcset="img/elinas-card-s.jpg 720w, img/elinas-card.jpg 1600w" sizes="(max-width: 700px) 100vw, 50vw" alt="La Villa d&#x27;Elinas" loading="lazy" width="720" height="480">
   </a>
   <div class="card__body">
-    <p class="card__lieu">Lusignan (86)</p>
+    <p class="card__lieu card__lieu--row"><span>Lusignan (86)</span><a class="iti" href="https://www.google.com/maps/dir/?api=1&destination=Villa%20Elinas%2C%2086600%20Lusignan" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>Itinéraire depuis chez moi</a></p>
     <h3 class="card__nom"><a href="#elinas">La Villa d&#x27;Elinas</a></h3>
     <p class="card__accroche">Une grande maison de famille avec piscine chauffée, billard, baby-foot et salle de fitness.</p>
     <ul class="chiffres"><li><b>14</b><span>couchages</span></li><li><b>6</b><span>chambres</span></li><li><b>4</b><span>salles de bain</span></li><li><b>chauffée</b><span>piscine</span></li></ul>
@@ -527,6 +530,7 @@ body.lock{overflow:hidden}
         <div class="plaq__btns"><a class="btn btn--ghost" href="plaquettes/plaquette-domaine-de-persine.pdf" target="_blank" rel="noopener">Ouvrir ↗</a><a class="btn btn--ghost" href="plaquettes/plaquette-domaine-de-persine.pdf" download>Télécharger</a></div></div>
       <div class="side-block"><h3>Les plus</h3><ul class="atouts"><li>Salle de 180 m² climatisée ouverte sur terrasse</li><li>10 chambres, 40 couchages</li><li>Chambre PMR et salle de bain adaptée au rez-de-chaussée</li><li>Cuisine traiteur : chambre froide, piano de cuisson, lave-vaisselle</li><li>Tables rondes, rectangulaires et chaises fournies</li><li>Pas de droit de bouchon</li><li>Parking privé dans l&#x27;enceinte</li><li>Gare de Lusignan à 3 minutes</li></ul></div>
       <div class="side-block"><h3>Accès</h3><p>3 rue de la Roche Grolleau, 86600 Lusignan</p><p>20 min de Poitiers, 25 min du Futuroscope, gare et aéroport de Poitiers à 25 min.</p>
+        <a class="btn btn--ghost btn--block" href="https://www.google.com/maps/dir/?api=1&destination=Domaine%20de%20Persine%2C%203%20rue%20de%20la%20Roche%20Grolleau%2C%2086600%20Lusignan" target="_blank" rel="noopener">Calculer mon trajet (Google Maps) ↗</a>
         <p><a class="lien" href="https://www.domainedepersine.fr" target="_blank" rel="noopener">Voir le site du domaine ↗</a></p></div>
       <a class="btn btn--block btn--ghost" href="#contact" data-ask="persine" data-mode="visite">Demander une visite</a>
       <a class="btn btn--block" href="#contact" data-ask="persine" data-mode="date">Demander une date</a>
@@ -559,6 +563,7 @@ body.lock{overflow:hidden}
         <div class="plaq__btns"><a class="btn btn--ghost" href="plaquettes/plaquette-chateau-de-montbeil.pdf" target="_blank" rel="noopener">Ouvrir ↗</a><a class="btn btn--ghost" href="plaquettes/plaquette-chateau-de-montbeil.pdf" download>Télécharger</a></div></div>
       <div class="side-block"><h3>Les plus</h3><ul class="atouts"><li>11 chambres, 49 couchages</li><li>4 salles de bain, dont une PMR au rez-de-chaussée</li><li>Chalet de réception de 100 m² climatisé avec terrasse</li><li>Kiosque pour cérémonie laïque</li><li>Cuisine avec chambre froide et accès traiteur à l&#x27;arrière</li><li>Petite salle dédiée aux enfants</li><li>Liste de prestataires sur demande</li></ul></div>
       <div class="side-block"><h3>Accès</h3><p>9 lieu-dit Montbeil, 86470 Boivre-la-Vallée</p><p>25 min de Poitiers, 30 min du Futuroscope, 45 min de Niort.</p>
+        <a class="btn btn--ghost btn--block" href="https://www.google.com/maps/dir/?api=1&destination=Ch%C3%A2teau%20de%20Montbeil%2C%209%20lieu-dit%20Montbeil%2C%2086470%20Boivre-la-Vall%C3%A9e" target="_blank" rel="noopener">Calculer mon trajet (Google Maps) ↗</a>
         <p><a class="lien" href="https://www.chateaudemontbeil.com" target="_blank" rel="noopener">Voir le site du domaine ↗</a></p></div>
       <a class="btn btn--block btn--ghost" href="#contact" data-ask="montbeil" data-mode="visite">Demander une visite</a>
       <a class="btn btn--block" href="#contact" data-ask="montbeil" data-mode="date">Demander une date</a>
@@ -573,7 +578,7 @@ body.lock{overflow:hidden}
     <span class="fiche__acts"><a class="btn btn--sm btn--ghost" href="#contact" data-ask="borderie" data-mode="visite">Demander une visite</a><a class="btn btn--sm" href="#contact" data-ask="borderie" data-mode="date">Demander une date</a></span></div>
   <header class="fiche__hero">
     <img src="img/borderie-card.jpg" alt="Château de la Borderie">
-    <div class="fiche__title"><p class="card__lieu">Charente (16)</p><h2 id="t-borderie">Château de la Borderie</h2><p>Un château privatisé au cœur d&#x27;un parc de 19 hectares, avec sa piscine, son gîte et ses chalets.</p></div>
+    <div class="fiche__title"><p class="card__lieu">Benest, Charente (16)</p><h2 id="t-borderie">Château de la Borderie</h2><p>Un château privatisé au cœur d&#x27;un parc de 19 hectares, avec sa piscine, son gîte et ses chalets.</p></div>
   </header>
   <div class="wrap fiche__grid">
     <div class="fiche__main">
@@ -590,7 +595,8 @@ body.lock{overflow:hidden}
       <div class="side-block plaq"><h3>La plaquette</h3><p>Espaces, chambres, tarifs détaillés et prestataires, au format PDF.</p>
         <div class="plaq__btns"><a class="btn btn--ghost" href="plaquettes/plaquette-chateau-de-la-borderie.pdf" target="_blank" rel="noopener">Ouvrir ↗</a><a class="btn btn--ghost" href="plaquettes/plaquette-chateau-de-la-borderie.pdf" download>Télécharger</a></div></div>
       <div class="side-block"><h3>Les plus</h3><ul class="atouts"><li>Château de 9 chambres, 24 couchages</li><li>Gîte, appartement familial et 2 chalets : 96 couchages au total</li><li>Salle de réception de 140 m² ouverte sur terrasse</li><li>Salle cocktail de 62 m² côté piscine</li><li>Piscine et parc de 19 hectares</li><li>Cuisine dédiée au traiteur, attenante à la salle</li><li>Chambres PMR au château et au gîte</li><li>Liste de prestataires sur demande</li></ul></div>
-      <div class="side-block"><h3>Accès</h3><p>Château de la Borderie, Charente</p><p>Gare de Ruffec à 20 min, Angoulême à 50 min, Poitiers à 1 h 10.</p>
+      <div class="side-block"><h3>Accès</h3><p>Château de la Borderie, 16350 Benest</p><p>Gare de Ruffec à 20 min, Angoulême à 50 min, Poitiers à 1 h 10.</p>
+        <a class="btn btn--ghost btn--block" href="https://www.google.com/maps/dir/?api=1&destination=Ch%C3%A2teau%20de%20la%20Borderie%2C%2016350%20Benest" target="_blank" rel="noopener">Calculer mon trajet (Google Maps) ↗</a>
         <p><a class="lien" href="https://www.chateaudelaborderie.com/fr/" target="_blank" rel="noopener">Voir le site du domaine ↗</a></p></div>
       <a class="btn btn--block btn--ghost" href="#contact" data-ask="borderie" data-mode="visite">Demander une visite</a>
       <a class="btn btn--block" href="#contact" data-ask="borderie" data-mode="date">Demander une date</a>
@@ -622,6 +628,7 @@ body.lock{overflow:hidden}
       
       <div class="side-block"><h3>Les plus</h3><ul class="atouts"><li>Piscine chauffée</li><li>Salon avec cheminée monumentale</li><li>Cuisine moderne entièrement équipée</li><li>Terrasse en bois et barbecue</li><li>Chambre familiale avec lits superposés</li></ul></div>
       <div class="side-block"><h3>Accès</h3><p>Bourg médiéval de Lusignan, 86600</p><p>Futuroscope 20 min, Poitiers 15 min, Vallée des Singes 20 min, Sanxay 15 min, Marais poitevin 30 min.</p>
+        <a class="btn btn--ghost btn--block" href="https://www.google.com/maps/dir/?api=1&destination=Le%20Clos%20de%20M%C3%A9lior%2C%2086600%20Lusignan" target="_blank" rel="noopener">Calculer mon trajet (Google Maps) ↗</a>
         <p><a class="lien" href="https://larenaissancemelusine.systeme.io/contact-melior" target="_blank" rel="noopener">Voir le site du domaine ↗</a></p></div>
       
       <a class="btn btn--block" href="#contact" data-ask="melior" data-mode="date">Demander une date</a>
@@ -653,6 +660,7 @@ body.lock{overflow:hidden}
       
       <div class="side-block"><h3>Les plus</h3><ul class="atouts"><li>Piscine chauffée</li><li>Billard, baby-foot et piano</li><li>Salle de fitness et salle de yoga</li><li>Deux salons télé</li><li>Jardin clos sans vis-à-vis</li><li>Terrasse en bois et barbecue</li></ul></div>
       <div class="side-block"><h3>Accès</h3><p>Hauteurs de Lusignan, 86600</p><p>Futuroscope 20 min, Poitiers 15 min, Vallée des Singes 20 min, Sanxay 15 min, Marais poitevin 30 min.</p>
+        <a class="btn btn--ghost btn--block" href="https://www.google.com/maps/dir/?api=1&destination=Villa%20Elinas%2C%2086600%20Lusignan" target="_blank" rel="noopener">Calculer mon trajet (Google Maps) ↗</a>
         <p><a class="lien" href="https://elinasvilla.systeme.io/contact" target="_blank" rel="noopener">Voir le site du domaine ↗</a></p></div>
       
       <a class="btn btn--block" href="#contact" data-ask="elinas" data-mode="date">Demander une date</a>

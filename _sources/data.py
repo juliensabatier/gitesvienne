@@ -12,6 +12,15 @@ CONSEILLER = {"prenom": "Julien", "nom": "Sabatier", "photo": "img/julien-sabati
               "role": "Votre interlocuteur pour les cinq domaines",
               "texte": "Je vous fais visiter les domaines, je réponds à vos questions et je prépare votre devis."}
 
+# Destination Google Maps pour le bouton « Itinéraire » (adresse ou nom du lieu)
+MAPS = {
+    "persine":  "Domaine de Persine, 3 rue de la Roche Grolleau, 86600 Lusignan",
+    "montbeil": "Château de Montbeil, 9 lieu-dit Montbeil, 86470 Boivre-la-Vallée",
+    "borderie": "Château de la Borderie, 16350 Benest",
+    "melior":   "Le Clos de Mélior, 86600 Lusignan",
+    "elinas":   "Villa Elinas, 86600 Lusignan",
+}
+
 PLAQUETTES = {
     "persine":  "plaquettes/plaquette-domaine-de-persine.pdf",
     "montbeil": "plaquettes/plaquette-chateau-de-montbeil.pdf",
@@ -94,7 +103,7 @@ DOMAINES = [
   {
     "slug": "borderie", "famille": "mariage",
     "nom": "Château de la Borderie", "court": "La Borderie",
-    "lieu": "Charente (16)", "adresse": "Château de la Borderie, Charente",
+    "lieu": "Benest, Charente (16)", "adresse": "Château de la Borderie, 16350 Benest",
     "site": "https://www.chateaudelaborderie.com/fr/",
     "accroche": "Un château privatisé au cœur d'un parc de 19 hectares, avec sa piscine, son gîte et ses chalets.",
     "chiffres": [("120", "convives assis"), ("96", "couchages"), ("140 m²", "salle de réception"), ("19 ha", "de parc")],

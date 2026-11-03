@@ -26,7 +26,7 @@ def card(d):
     <img src="img/{d['slug']}-card-s.jpg" srcset="img/{d['slug']}-card-s.jpg 720w, img/{d['slug']}-card.jpg 1600w" sizes="(max-width: 700px) 100vw, 50vw" alt="{E(d['nom'])}" loading="lazy" width="720" height="480">
   </a>
   <div class="card__body">
-    <p class="card__lieu">{E(d['lieu'])}</p>
+    <p class="card__lieu card__lieu--row"><span>{E(d['lieu'])}</span>{iti_card(d)}</p>
     <h3 class="card__nom"><a href="#{d['slug']}">{E(d['nom'])}</a></h3>
     <p class="card__accroche">{E(d['accroche'])}</p>
     <ul class="chiffres">{chiffres}</ul>
@@ -39,6 +39,12 @@ def card(d):
     </div>
   </div>
 </article>'''
+
+from urllib.parse import quote
+def maps_url(slug):
+    return "https://www.google.com/maps/dir/?api=1&destination=" + quote(MAPS[slug])
+def iti_card(d):
+    return f'<a class="iti" href="{maps_url(d["slug"])}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>Itinéraire depuis chez moi</a>'
 
 def plaq_card(d):
     p = PLAQUETTES.get(d["slug"])
@@ -119,6 +125,7 @@ def fiche(d):
       {plaq_block(d)}
       <div class="side-block"><h3>Les plus</h3><ul class="atouts">{atouts}</ul></div>
       <div class="side-block"><h3>Accès</h3><p>{E(d['adresse'])}</p><p>{E(d['acces'])}</p>
+        <a class="btn btn--ghost btn--block" href="{maps_url(d['slug'])}" target="_blank" rel="noopener">Calculer mon trajet (Google Maps) ↗</a>
         <p><a class="lien" href="{d['site']}" target="_blank" rel="noopener">Voir le site du domaine ↗</a></p></div>
       {('<a class="btn btn--block btn--ghost" href="#contact" data-ask="'+d['slug']+'" data-mode="visite">Demander une visite</a>') if d['famille']=='mariage' else ''}
       <a class="btn btn--block" href="#contact" data-ask="{d['slug']}" data-mode="date">Demander une date</a>

@@ -13,15 +13,15 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..600;1,400..600&family=Instrument+Sans:wght@400;500;600&display=swap">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "LodgingBusiness", "name": "Domaine de Persine", "description": "L'ancien bistrot du village, restauré dans un esprit chic et champêtre, avec son parc clos d'un hectare.", "address": {"@type": "PostalAddress", "streetAddress": "3 rue de la Roche Grolleau, 86600 Lusignan", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#persine", "image": "https://gitesvienne.fr/img/persine-card.jpg", "priceRange": "à partir de 2700 €"}, {"@type": "LodgingBusiness", "name": "Château de Montbeil", "description": "Un ancien relais de chasse entièrement rénové en 2020, son escalier romantique et son parc à kiosque.", "address": {"@type": "PostalAddress", "streetAddress": "9 lieu-dit Montbeil, 86470 Boivre-la-Vallée", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#montbeil", "image": "https://gitesvienne.fr/img/montbeil-card.jpg", "priceRange": "à partir de 2700 €"}, {"@type": "LodgingBusiness", "name": "Château de la Borderie", "description": "Un château privatisé au cœur d'un parc de 19 hectares, avec sa piscine, son gîte et ses chalets.", "address": {"@type": "PostalAddress", "streetAddress": "Château de la Borderie, Charente", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#borderie", "image": "https://gitesvienne.fr/img/borderie-card.jpg", "priceRange": "à partir de 6380 €"}, {"@type": "LodgingBusiness", "name": "Le Clos de Mélior", "description": "Une demeure du XVe siècle sur les hauteurs de Lusignan, sa grande cheminée et sa piscine chauffée.", "address": {"@type": "PostalAddress", "streetAddress": "Bourg médiéval de Lusignan, 86600", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#melior", "image": "https://gitesvienne.fr/img/melior-card.jpg", "priceRange": "à partir de 600 €"}, {"@type": "LodgingBusiness", "name": "La Villa d'Elinas", "description": "Une grande maison de famille avec piscine chauffée, billard, baby-foot et salle de fitness.", "address": {"@type": "PostalAddress", "streetAddress": "Hauteurs de Lusignan, 86600", "addressCountry": "FR"}, "url": "https://gitesvienne.fr/#elinas", "image": "https://gitesvienne.fr/img/elinas-card.jpg", "priceRange": "à partir de 800 €"}]}</script>
 <style>
 /* Mise en page : ouverture vidéo sur Lusignan, puis deux familles (mariages en or, week-ends en vert sauge), un calendrier commun, des fiches plein écran. */
 :root{
   --bg:#F3F2EE; --paper:#FBFAF7; --ink:#1C252D; --muted:#5A646C; --line:#D9D6CE;
-  --accent:#2E5B7A; --accent-ink:#FFFFFF; --gold:#94733A; --sage:#5C6C47;
+  --accent:#2E5B7A; --accent-ink:#FFFFFF; --gold:#7A5A26; --sage:#5C6C47;
   --booked:#E3DFD6; --booked-ink:#9A958B; --sel:#2E5B7A; --range:#DCE6EE; --scrim:rgba(14,20,25,.55);
-  --f-display:"Bodoni Moda", "Didot", "Times New Roman", serif;
+  --f-display:"Lora", Georgia, "Times New Roman", serif;
   --f-body:"Instrument Sans", "Segoe UI", system-ui, sans-serif;
   --r:4px; --maxw:1180px;
 }
@@ -42,7 +42,7 @@ body{background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--f-body);-webk
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--paper)}
 img{max-width:100%;display:block}
 a{color:inherit}
-h1,h2,h3,h4{font-family:var(--f-display);font-weight:500;line-height:1.1;text-wrap:balance;margin:0}
+h1,h2,h3,h4{font-family:var(--f-display);font-weight:500;letter-spacing:0;line-height:1.1;text-wrap:balance;margin:0}
 p{margin:0}
 .wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -273,6 +273,13 @@ footer a:hover{color:var(--ink)}
 footer .logo b{font-size:26px;color:var(--ink)}
 @media (max-width:760px){footer .wrap{grid-template-columns:1fr}}
 body.lock{overflow:hidden}
+/* Chiffres : police de texte, bien lisible */
+.reperes b,.chiffres b,.prix b,.tarifs td,.devis .total{font-family:var(--f-body)!important;font-weight:600!important;letter-spacing:-.01em}
+.reperes b{font-size:24px}.chiffres b{font-size:19px}.chiffres--lg b{font-size:26px}.prix b{font-size:20px}.devis .total{font-size:28px}
+.tarifs td{font-size:16px!important}
+.month h4{font-family:var(--f-body);font-weight:600;font-size:17px}
+.hero h1{font-weight:500}
+.section__head h2,.contact__info h2,.fiche__title h2,.card__nom,.cons__nom{font-weight:500}
 .card__plaq{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;padding-top:2px}
 .card__plaq .dl{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
 .plaq__btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}

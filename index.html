@@ -62,8 +62,21 @@ p{margin:0}
 
 /* Ouverture */
 .hero{position:relative;color:#fff;background:#24303A;overflow:hidden}
-.hero video,.hero .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,16,22,.15) 0%,rgba(10,16,22,.2) 40%,rgba(10,16,22,.72) 100%)}
+.slides{position:absolute;inset:0;margin:0;padding:0;list-style:none}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
+.slide.on{opacity:1}
+.slide img{width:100%;height:100%;object-fit:cover;transform:scale(1.02)}
+.slide.on img{animation:zoom 8s ease-out forwards}
+@keyframes zoom{from{transform:scale(1.02)}to{transform:scale(1.09)}}
+.hero__nav{position:absolute;z-index:2;right:max(16px,env(safe-area-inset-right,0px));bottom:16px;display:flex;align-items:center;gap:14px}
+.hero__cap{color:#fff;text-decoration:none;font-size:13px;letter-spacing:.04em;opacity:.92}
+.hero__cap:hover{text-decoration:underline}
+.dots{display:flex;gap:6px}
+.dots button{width:28px;height:28px;padding:0;border:0;background:transparent;cursor:pointer;display:grid;place-items:center}
+.dots button::before{content:"";width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.45);transition:background .3s,transform .3s}
+.dots button[aria-current="true"]::before{background:#fff;transform:scale(1.25)}
+@media (max-width:560px){.hero__cap{display:none}.hero__nav{left:max(16px,env(safe-area-inset-left,0px));right:auto}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,16,22,.55) 0%,rgba(10,16,22,.15) 60%,rgba(10,16,22,0) 100%),linear-gradient(180deg,rgba(10,16,22,.1) 0%,rgba(10,16,22,.15) 45%,rgba(10,16,22,.7) 100%)}
 .hero .wrap{position:relative;z-index:1;padding-block:clamp(120px,22vw,220px) clamp(40px,6vw,64px);display:grid;gap:18px}
 .hero .eyebrow{color:rgba(255,255,255,.85)}
 .hero h1{font-size:clamp(40px,7vw,84px);font-weight:400;letter-spacing:-.015em;max-width:14ch}
@@ -73,7 +86,6 @@ p{margin:0}
 .hero .btn--ghost{color:#fff;border-color:rgba(255,255,255,.7)}
 .hero .btn--ghost:hover{background:rgba(255,255,255,.12)}
 .hero .btn{background:#fff;color:#1C252D;border-color:#fff}
-.hero .credit{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:12px;z-index:1;font-size:11px;color:rgba(255,255,255,.7)}
 
 .reperes{border-bottom:1px solid var(--line);background:var(--paper)}
 .reperes ul{list-style:none;margin:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding-block:0}
@@ -304,15 +316,14 @@ body.lock{overflow:hidden}
 
 <main id="accueil">
 <section class="hero" aria-label="Présentation">
-  <img class="poster" src="img/hero-poster.jpg" alt="">
-  <video autoplay muted loop playsinline preload="metadata" poster="img/hero-poster.jpg" aria-hidden="true"><source src="video/lusignan.mp4" type="video/mp4"></video>
+  <ul class="slides" aria-hidden="true"><li class="slide" data-slug="borderie" data-nom="Château de la Borderie"><img src="img/borderie-card.jpg" fetchpriority="high" alt=""></li><li class="slide" data-slug="montbeil" data-nom="Château de Montbeil"><img data-src="img/montbeil-01.jpg" alt=""></li><li class="slide" data-slug="persine" data-nom="Domaine de Persine"><img data-src="img/persine-01.jpg" alt=""></li><li class="slide" data-slug="melior" data-nom="Le Clos de Mélior"><img data-src="img/melior-card.jpg" alt=""></li><li class="slide" data-slug="borderie" data-nom="Château de la Borderie"><img data-src="img/borderie-13.jpg" alt=""></li><li class="slide" data-slug="elinas" data-nom="La Villa d&#x27;Elinas"><img data-src="img/elinas-card.jpg" alt=""></li><li class="slide" data-slug="montbeil" data-nom="Château de Montbeil"><img data-src="img/montbeil-card.jpg" alt=""></li></ul>
   <div class="wrap">
     <p class="eyebrow">Au pays de Mélusine, entre Poitiers et Niort</p>
-    <h1>Cinq maisons pour <em>vos grands jours</em> et vos week-ends</h1>
-    <p class="lead">Trois domaines de mariage et deux gîtes avec piscine autour de Lusignan, à 25 minutes du Futuroscope. Consultez les dates libres et demandez la vôtre.</p>
+    <h1>5 superbes domaines vous ouvrent <em>leurs portes</em></h1>
+    <p class="lead">Pour vos événements : mariages, événements familiaux, séminaires, loisirs ou vacances.</p>
     <div class="actions"><a class="btn" href="#disponibilites">Voir les disponibilités</a><a class="btn btn--ghost" href="#mariages">Découvrir les domaines</a></div>
   </div>
-  <p class="credit">Lusignan vu du ciel</p>
+  <div class="hero__nav"><a class="hero__cap" id="hero-cap" href="#borderie">Château de la Borderie →</a><div class="dots" id="dots" role="group" aria-label="Choisir une photo"></div></div>
 </section>
 
 <div class="reperes"><ul class="wrap">
@@ -863,9 +874,22 @@ document.addEventListener("keydown", e => {
 let sx = 0; lb.addEventListener("touchstart", e => sx = e.touches[0].clientX, {passive:true});
 lb.addEventListener("touchend", e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) show(idx + (dx<0?1:-1)); });
 
-/* Vidéo : pas d'animation si l'utilisateur la refuse */
-const v = $(".hero video");
-if (v && matchMedia("(prefers-reduced-motion: reduce)").matches) { v.pause(); v.removeAttribute("autoplay"); }
+/* Carrousel de l'ouverture */
+const slides = $$(".slide"), dots = $("#dots"), cap = $("#hero-cap");
+let cur = 0, timer = null;
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+slides.forEach((sl, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", sl.dataset.nom); b.onclick = () => { go(i); restart(); }; dots.appendChild(b); });
+function go(i){
+  slides[cur].classList.remove("on"); cur = (i + slides.length) % slides.length; const sl = slides[cur];
+  const im = sl.querySelector("img"); if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute("data-src"); }
+  sl.classList.add("on"); cap.textContent = sl.dataset.nom + " →"; cap.href = "#" + sl.dataset.slug;
+  $$("button", dots).forEach((b, k) => b.setAttribute("aria-current", String(k === cur)));
+  const nx = slides[(cur + 1) % slides.length].querySelector("img"); if (nx.dataset.src) { nx.src = nx.dataset.src; nx.removeAttribute("data-src"); }
+}
+function restart(){ clearInterval(timer); if (!still) timer = setInterval(() => go(cur + 1), 6000); }
+go(0); restart();
+const hero = $(".hero"); hero.addEventListener("mouseenter", () => clearInterval(timer)); hero.addEventListener("mouseleave", restart);
+document.addEventListener("visibilitychange", () => document.hidden ? clearInterval(timer) : restart());
 })();
 </script>
 </body>

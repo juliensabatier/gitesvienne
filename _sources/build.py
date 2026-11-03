@@ -67,6 +67,15 @@ def conseiller(slug="", compact=False):
       <p class="cons__nom">{E(full)}</p><p class="cons__desc">{E(c['texte'])}</p>
       <p class="cons__coord">{E(CONTACT_EMAIL)} · {E(PHONE)}</p>{btns}</div></div>'''
 
+HERO = [("borderie-card","borderie"),("montbeil-01","montbeil"),("persine-01","persine"),("melior-card","melior"),("borderie-13","borderie"),("elinas-card","elinas"),("montbeil-card","montbeil")]
+def slides():
+    noms = {d["slug"]: d["nom"] for d in DOMAINES}
+    out = []
+    for i, (img, slug) in enumerate(HERO):
+        attr = f'src="img/{img}.jpg" fetchpriority="high"' if i == 0 else f'data-src="img/{img}.jpg"'
+        out.append(f'<li class="slide" data-slug="{slug}" data-nom="{E(noms[slug])}"><img {attr} alt=""></li>')
+    return "".join(out)
+
 def tarif_table(d):
     order = [k for k in ["H", "M", "B", "C", "W"] if k in d["tarifs"]]
     rows = "".join(
@@ -143,7 +152,7 @@ out = (tpl.replace("%%TITLE%%", title)
           .replace("%%CHIPS%%", "".join(f'<button type="button" class="chip chip--{d["famille"]}" data-chip="{d["slug"]}" aria-pressed="false">{E(d["court"])}</button>' for d in DOMAINES))
           .replace("%%LINKS%%", "".join(f'<li><a href="{d["site"]}" target="_blank" rel="noopener">{E(d["nom"])}</a></li>' for d in DOMAINES))
           .replace("%%EMAIL%%", CONTACT_EMAIL).replace("%%PHONE%%", PHONE).replace("%%PHONE_INTL%%", PHONE_INTL)
-          .replace("%%JSONLD%%", jsonld()).replace("%%CONSEILLER%%", conseiller(compact=True))
+          .replace("%%JSONLD%%", jsonld()).replace("%%CONSEILLER%%", conseiller(compact=True)).replace("%%SLIDES%%", slides())
           .replace("%%DATA%%", json.dumps(js_data, ensure_ascii=False)))
 if PREVIEW:
     out = out.replace('<!--HEAD-->', '<meta name="claude:viewport-fit-sides" content="cover">').replace("<!--BODY-->", "")

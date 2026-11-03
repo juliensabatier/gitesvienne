@@ -60,7 +60,7 @@ $domNom = $D ? $D['nom'] : 'Non précisé';
 
 /* ---------- 1. Message pour vous ---------- */
 $lignes = ($objet === 'visite')
-  ? "DEMANDE DE VISITE\nJour souhaité : " . ($fr($vdate) ?: '-') . " ($vmom)\nDate de l'événement : " . ($fr($arr) ?: '-') . ($fr($dep) ? ' au ' . $fr($dep) : '') . "\n"
+  ? "DEMANDE DE VISITE\nJour souhaité : " . ($fr($vdate) ?: '-') . ($vmom ? " ($vmom)" : '') . "\nDate de l'événement : " . ($fr($arr) ?: '-') . ($fr($dep) ? ' au ' . $fr($dep) : '') . "\n"
   : "DEMANDE DE DATE\nArrivée : " . ($fr($arr) ?: '-') . "\nDépart : " . ($fr($dep) ?: '-') . "\n";
 $body = "Nouvelle demande depuis gitesvienne.fr\n\nDomaine : $domNom\nType : $type\n$lignes"
       . "Invités : " . ($nb ?: '-') . "\nCouchages : " . ($couch ?: '-') . "\n\n"

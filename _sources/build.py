@@ -16,24 +16,27 @@ def eur(n):
 def min_price(d):
     return min(d["tarifs"].values())
 
+def link(slug):
+    return "#" + slug if PREVIEW else PAGES[slug][0]
+
 def card(d):
     tag = "Mariages et réceptions" if d["famille"] == "mariage" else "Week-ends et vacances"
     chiffres = "".join(f'<li><b>{E(v)}</b><span>{E(l)}</span></li>' for v, l in d["chiffres"])
     prefix = "à partir de " if d["famille"] == "mariage" or True else ""
     return f'''
 <article class="card card--{d['famille']}" id="carte-{d['slug']}">
-  <a class="card__img" href="#{d['slug']}" aria-label="Découvrir {E(d['nom'])}">
+  <a class="card__img" href="{link(d['slug'])}" aria-label="Découvrir {E(d['nom'])}">
     <img src="img/{d['slug']}-card-s.jpg" srcset="img/{d['slug']}-card-s.jpg 720w, img/{d['slug']}-card.jpg 1600w" sizes="(max-width: 700px) 100vw, 50vw" alt="{E(d['nom'])}" loading="lazy" width="720" height="480">
   </a>
   <div class="card__body">
     <p class="card__lieu card__lieu--row"><span>{E(d['lieu'])}</span>{iti_card(d)}</p>
-    <h3 class="card__nom"><a href="#{d['slug']}">{E(d['nom'])}</a></h3>
+    <h3 class="card__nom"><a href="{link(d['slug'])}">{E(d['nom'])}</a></h3>
     <p class="card__accroche">{E(d['accroche'])}</p>
     <ul class="chiffres">{chiffres}</ul>
     <div class="card__foot">
       <p class="prix">{prefix}<b>{eur(min_price(d))}</b> {E(d['unite'])}</p>
       <div class="card__actions">
-        <a class="btn btn--ghost" href="#{d['slug']}">Découvrir</a>
+        <a class="btn btn--ghost" href="{link(d['slug'])}">Découvrir</a>
         <button class="btn" type="button" data-dispo="{d['slug']}">Voir les dates</button>
       </div>{plaq_card(d)}
     </div>
@@ -67,7 +70,7 @@ def avis_home():
         a = AVIS[d["slug"]]
         nom, ctx, t = a["extraits"][0]
         out.append(f'''<article class="avis__dom"><a class="avis__score" href="{avis_url(d['slug'])}" target="_blank" rel="noopener">{stars()}<b>{a['note']}/5</b><span>{a['nb']} avis ↗</span></a>
-          <h3><a href="#{d['slug']}">{E(d['nom'])}</a></h3><blockquote>« {E(t)} »</blockquote><p class="avis__who"><b>{E(nom)}</b> · {E(ctx)}</p></article>''')
+          <h3><a href="{link(d['slug'])}">{E(d['nom'])}</a></h3><blockquote>« {E(t)} »</blockquote><p class="avis__who"><b>{E(nom)}</b> · {E(ctx)}</p></article>''')
     total = sum(AVIS[k]["nb"] for k in AVIS)
     return "".join(out), total
 
@@ -160,40 +163,84 @@ def fiche(d):
   <div class="wrap fiche__cons">{conseiller(d['slug'])}</div>
 </section>'''
 
-def jsonld():
-    items = []
-    for d in DOMAINES:
-        items.append({"@type": "LodgingBusiness", "name": d["nom"], "description": d["accroche"],
-                      "address": {"@type": "PostalAddress", "streetAddress": d["adresse"], "addressCountry": "FR"},
-                      "url": f"https://gitesvienne.fr/#{d['slug']}", "image": f"https://gitesvienne.fr/img/{d['slug']}-card.jpg",
-                      "priceRange": f"à partir de {min_price(d)} €"})
+def biz(d):
+    return {"@type": ["LodgingBusiness", "EventVenue"], "@id": f"https://gitesvienne.fr{PAGES[d['slug']][0]}#lieu",
+            "name": d["nom"], "description": d["accroche"],
+            "address": {"@type": "PostalAddress", "streetAddress": d["adresse"], "addressRegion": "Nouvelle-Aquitaine", "addressCountry": "FR"},
+            "url": f"https://gitesvienne.fr{PAGES[d['slug']][0]}", "image": f"https://gitesvienne.fr/img/{d['slug']}-card.jpg",
+            "telephone": PHONE_INTL, "priceRange": f"à partir de {min_price(d)} €",
+            "sameAs": [d["site"], avis_url(d["slug"])]}
+
+def jsonld(only=None):
+    items = [biz(d) for d in DOMAINES if only is None or d["slug"] == only]
+    if only is None:
+        items.insert(0, {"@type": "Organization", "@id": "https://gitesvienne.fr/#org", "name": "Gîtes Vienne", "url": "https://gitesvienne.fr/",
+                         "email": CONTACT_EMAIL, "telephone": PHONE_INTL, "logo": "https://gitesvienne.fr/img/favicon.png",
+                         "founder": {"@type": "Person", "name": "Julien Sabatier"}})
     return json.dumps({"@context": "https://schema.org", "@graph": items}, ensure_ascii=False)
 
 js_data = {
     "domaines": [{k: d[k] for k in ["slug", "famille", "nom", "court", "saisons", "default_saison", "tarifs", "unite", "formule"]} for d in DOMAINES],
     "ical": ICAL, "snapshot": SNAPSHOT, "snapshotDate": SNAPSHOT_DATE, "saisonNom": SAISON_NOM,
-    "email": CONTACT_EMAIL, "plaquettes": PLAQUETTES,
+    "email": CONTACT_EMAIL, "plaquettes": PLAQUETTES, "pages": {k: v[0] for k, v in PAGES.items()},
 }
 
 tpl = open(os.path.join(os.path.dirname(__file__), "template.html"), encoding="utf-8").read()
-title = "Gîtes Vienne" if PREVIEW else "Gîtes Vienne · Domaines de mariage et gîtes de groupe dans la Vienne (86)"
-out = (tpl.replace("%%TITLE%%", title)
-          .replace("%%CARDS_MARIAGE%%", "".join(card(d) for d in DOMAINES if d["famille"] == "mariage"))
+import re
+ROOT = os.path.join(os.path.dirname(__file__), "..")
+
+def common(t):
+    return (t.replace("%%CARDS_MARIAGE%%", "".join(card(d) for d in DOMAINES if d["famille"] == "mariage"))
           .replace("%%CARDS_GITE%%", "".join(card(d) for d in DOMAINES if d["famille"] == "gite"))
-          .replace("%%FICHES%%", "".join(fiche(d) for d in DOMAINES))
           .replace("%%OPTIONS%%", "".join(f'<option value="{d["slug"]}">{E(d["nom"])}</option>' for d in DOMAINES))
           .replace("%%CHIPS%%", "".join(f'<button type="button" class="chip chip--{d["famille"]}" data-chip="{d["slug"]}" aria-pressed="false">{E(d["court"])}</button>' for d in DOMAINES))
           .replace("%%LINKS%%", "".join(f'<li><a href="{d["site"]}" target="_blank" rel="noopener">{E(d["nom"])}</a></li>' for d in DOMAINES))
           .replace("%%EMAIL%%", CONTACT_EMAIL).replace("%%PHONE%%", PHONE).replace("%%PHONE_INTL%%", PHONE_INTL)
-          .replace("%%JSONLD%%", jsonld()).replace("%%CONSEILLER%%", conseiller(compact=True)).replace("%%SLIDES%%", slides()).replace("%%AVIS_HOME%%", avis_home()[0]).replace("%%AVIS_TOTAL%%", str(avis_home()[1]))
+          .replace("%%CONSEILLER%%", conseiller(compact=True)).replace("%%SLIDES%%", slides())
+          .replace("%%AVIS_HOME%%", avis_home()[0]).replace("%%AVIS_TOTAL%%", str(avis_home()[1]))
           .replace("%%DATA%%", json.dumps(js_data, ensure_ascii=False)))
-if PREVIEW:
-    out = out.replace('<!--HEAD-->', '<meta name="claude:viewport-fit-sides" content="cover">').replace("<!--BODY-->", "")
-else:
+
+def wrap(out, favicon="img/favicon.png"):
     head, body = out.replace("<!--HEAD-->", "").split("<!--BODY-->")
-    out = ('<!doctype html>\n<html lang="fr">\n<head>\n<meta charset="utf-8">\n'
-           '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
-           '<link rel="icon" href="img/favicon.png">\n' + head + '</head>\n<body>\n' + body + '</body>\n</html>\n')
-dest = os.path.join(os.path.dirname(__file__), "..", "preview.html" if PREVIEW else "index.html")
-open(dest, "w", encoding="utf-8").write(out)
-print("écrit", os.path.abspath(dest), len(out), "octets")
+    return ('<!doctype html>\n<html lang="fr">\n<head>\n<meta charset="utf-8">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+            f'<link rel="icon" href="{favicon}">\n' + head + '</head>\n<body>\n' + body + '</body>\n</html>\n')
+
+def write(path, txt):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    open(path, "w", encoding="utf-8").write(txt); print("écrit", os.path.relpath(path, ROOT), len(txt), "octets")
+
+if PREVIEW:
+    out = common(tpl.replace("%%TITLE%%", "Gîtes Vienne")).replace("%%FICHES%%", "".join(fiche(d) for d in DOMAINES)).replace("%%JSONLD%%", jsonld())
+    out = out.replace('<!--HEAD-->', '<meta name="claude:viewport-fit-sides" content="cover">').replace("<!--BODY-->", "").replace("<!--HOME-->", "").replace("<!--/HOME-->", "")
+    write(os.path.join(ROOT, "preview.html"), out)
+else:
+    home = common(tpl.replace("%%TITLE%%", "Gîtes Vienne · Domaines de mariage et gîtes de groupe dans la Vienne (86)")).replace("%%FICHES%%", "").replace("%%JSONLD%%", jsonld())
+    write(os.path.join(ROOT, "index.html"), wrap(home.replace("<!--HOME-->", "").replace("<!--/HOME-->", "")))
+    for d in DOMAINES:
+        url, ttl, desc = PAGES[d["slug"]]
+        f = fiche(d).replace(' hidden aria-labelledby', ' aria-labelledby').replace(f'class="fiche fiche--{d["famille"]}"', f'class="fiche fiche--{d["famille"]} fiche--page"')
+        f = f.replace(f'<h2 id="t-{d["slug"]}">', f'<h1 id="t-{d["slug"]}">').replace(f'{E(d["nom"])}</h2><p>', f'{E(d["nom"])}</h1><p>', 1)
+        f = f.replace('href="#domaines"', 'href="/#mariages"')
+        f = re.sub(r'href="#contact" data-ask="(\w+)" data-mode="(\w+)"', r'href="/?d=\1&amp;m=\2#contact" data-ask="\1" data-mode="\2"', f)
+        f = re.sub(r'href="#contact" data-ask="(\w+)"', r'href="/?d=\1#contact" data-ask="\1"', f)
+        page = common(tpl.replace("%%TITLE%%", E(ttl)))
+        a, b = page.split("<!--HOME-->"); _, c = b.split("<!--/HOME-->")
+        page = a + f + c
+        page = page.replace("%%FICHES%%", "").replace("%%JSONLD%%", jsonld(d["slug"]))
+        page = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{E(desc)}">', page, count=1)
+        page = page.replace('<link rel="canonical" href="https://gitesvienne.fr/">', f'<link rel="canonical" href="https://gitesvienne.fr{url}">')
+        page = page.replace('<meta property="og:url" content="https://gitesvienne.fr/">', f'<meta property="og:url" content="https://gitesvienne.fr{url}">')
+        page = page.replace('content="https://gitesvienne.fr/img/borderie-card.jpg"', f'content="https://gitesvienne.fr/img/{d["slug"]}-card.jpg"')
+        page = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{E(d["nom"])}">', page, count=1)
+        # chemins absolus
+        page = re.sub(r'(?<=[\s"(,])(img|plaquettes)/', r'/\1/', page)
+        page = page.replace('fetch("ical.php"', 'fetch("/ical.php"').replace('fetch("contact.php"', 'fetch("/contact.php"')
+        page = page.replace('href="#accueil"', 'href="/"').replace('href="#mariages"', 'href="/#mariages"').replace('href="#week-ends"', 'href="/#week-ends"').replace('href="#avis"', 'href="/#avis"').replace('href="#disponibilites"', 'href="/#disponibilites"')
+        write(os.path.join(ROOT, url.strip("/"), "index.html"), wrap(page, "/img/favicon.png"))
+    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+          '  <url><loc>https://gitesvienne.fr/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>']
+    sm += [f'  <url><loc>https://gitesvienne.fr{PAGES[d["slug"]][0]}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>' for d in DOMAINES]
+    sm += [f'  <url><loc>https://gitesvienne.fr/{p}</loc></url>' for p in PLAQUETTES.values()]
+    sm.append('</urlset>')
+    write(os.path.join(ROOT, "sitemap.xml"), "\n".join(sm) + "\n")

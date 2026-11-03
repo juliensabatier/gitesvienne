@@ -50,6 +50,20 @@ AVIS = {
   ]},
 }
 
+# Une page par domaine (référencement) : adresse, titre Google et description
+PAGES = {
+  "persine":  ("/domaine-de-persine/", "Domaine de Persine · Gîte de mariage 40 couchages à Lusignan (Vienne)",
+               "Domaine de mariage à Lusignan (86), près de Poitiers et du Futuroscope : salle de réception climatisée de 180 m² (130 convives), 40 couchages, parc clos d'un hectare. Tarifs, photos et disponibilités."),
+  "montbeil": ("/chateau-de-montbeil/", "Château de Montbeil · Château de mariage près de Poitiers (Vienne)",
+               "Château de mariage à Boivre-la-Vallée (86), 25 min de Poitiers : 49 couchages, salle de réception, chalet de 100 m², parc avec kiosque. Tarifs, photos et disponibilités."),
+  "borderie": ("/chateau-de-la-borderie/", "Château de la Borderie · Château de mariage 96 couchages en Charente",
+               "Château de mariage privatisé à Benest (16), aux portes de la Vienne : 96 couchages, salle de réception de 140 m², piscine, parc de 19 hectares. Tarifs, photos et disponibilités."),
+  "melior":   ("/clos-de-melior/", "Le Clos de Mélior · Gîte 12 personnes avec piscine à Lusignan, près du Futuroscope",
+               "Gîte de caractère à Lusignan (86) pour 12 personnes : piscine chauffée, grande cheminée, 4 chambres, à 20 min du Futuroscope. Tarifs, photos et disponibilités."),
+  "elinas":   ("/villa-elinas/", "Villa d'Elinas · Gîte 14 personnes avec piscine à Lusignan, près du Futuroscope",
+               "Grand gîte de groupe à Lusignan (86) pour 14 personnes : piscine chauffée, billard, salle de fitness, 6 chambres, à 20 min du Futuroscope. Tarifs, photos et disponibilités."),
+}
+
 PLAQUETTES = {
     "persine":  "plaquettes/plaquette-domaine-de-persine.pdf",
     "montbeil": "plaquettes/plaquette-chateau-de-montbeil.pdf",

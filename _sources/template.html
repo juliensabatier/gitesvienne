@@ -271,6 +271,8 @@ footer a:hover{color:var(--ink)}
 footer .logo b{font-size:26px;color:var(--ink)}
 @media (max-width:760px){footer .wrap{grid-template-columns:1fr}}
 body.lock{overflow:hidden}
+.fiche--page{position:static;inset:auto;z-index:auto;overflow:visible}
+.fiche--page .fiche__bar{position:static}
 .avis-home{padding-top:0}
 .avis-home .section__head h2 i{color:var(--gold)}
 .avis__doms{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
@@ -345,6 +347,7 @@ body.lock{overflow:hidden}
 </header>
 
 <main id="accueil">
+<!--HOME-->
 <section class="hero" aria-label="Présentation">
   <ul class="slides" aria-hidden="true">%%SLIDES%%</ul>
   <div class="wrap">
@@ -406,6 +409,7 @@ body.lock{overflow:hidden}
     </div>
   </div>
 </section>
+<!--/HOME-->
 
 <section class="section" id="contact">
   <div class="wrap contact__grid">
@@ -562,17 +566,19 @@ function devisHTML(st){
 
 /* Calendrier principal */
 const devis = $("#devis");
-let mainCal;
+let mainCal = null;
 function selectChip(slug){
   $$("[data-chip]").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.chip===slug)));
   mainCal.set(slug);
 }
+if (devis) {
 mainCal = Calendar($('[data-cal="main"]'), "persine", st => { devis.innerHTML = devisHTML(st); });
 devis.innerHTML = devisHTML(mainCal.st);
 $$("[data-chip]").forEach(c => c.addEventListener("click", () => selectChip(c.dataset.chip)));
 $('[data-chip="persine"]').setAttribute("aria-pressed","true");
 devis.addEventListener("click", e => { if (e.target.closest("[data-send]")) fillForm(mainCal.st); if (e.target.closest("[data-send-visite]")) fillForm(mainCal.st, "visite"); });
 $$("[data-dispo]").forEach(b => b.addEventListener("click", () => { selectChip(b.dataset.dispo); $("#disponibilites").scrollIntoView({behavior:"smooth"}); }));
+}
 
 /* Calendriers des fiches */
 const ficheCals = {};
@@ -586,7 +592,7 @@ $$('.fiche [data-cal]').forEach(el => {
     if (e.target.closest("[data-send]") || v) { location.hash = "contact"; fillForm(ficheCals[slug].st, v ? "visite" : "date"); }
   });
 });
-ready.then(() => { mainCal.render(); Object.values(ficheCals).forEach(c => c.render()); devis.innerHTML = devisHTML(mainCal.st); });
+ready.then(() => { Object.values(ficheCals).forEach(c => c.render()); if (mainCal) { mainCal.render(); devis.innerHTML = devisHTML(mainCal.st); } });
 
 /* ---------- Formulaire ---------- */
 function setMode(m){
@@ -640,6 +646,8 @@ $$("[data-copy]").forEach(b => b.addEventListener("click", () => {
 /* ---------- Fiches (navigation par #ancre) ---------- */
 function route(){
   const h = location.hash.slice(1);
+  if (DATA.pages && DATA.pages[h] && !document.querySelector(".fiche[data-slug='" + h + "']")) { location.replace(DATA.pages[h]); return; }
+  if (document.querySelector(".fiche--page")) return;
   let open = null;
   $$(".fiche").forEach(f => { const on = f.dataset.slug === h; f.hidden = !on; if (on) open = f; });
   document.body.classList.toggle("lock", !!open);
@@ -659,25 +667,30 @@ $("#lb-prev").onclick = () => show(idx-1); $("#lb-next").onclick = () => show(id
 lb.addEventListener("click", e => { if (e.target === lb || e.target.classList.contains("lb__stage")) lb.hidden = true; });
 document.addEventListener("keydown", e => {
   if (!lb.hidden){ if (e.key==="Escape") lb.hidden = true; if (e.key==="ArrowLeft") show(idx-1); if (e.key==="ArrowRight") show(idx+1); return; }
-  if (e.key==="Escape" && document.body.classList.contains("lock")) location.hash = "domaines";
+  if (e.key==="Escape" && document.body.classList.contains("lock") && !document.querySelector(".fiche--page")) location.hash = "domaines";
 });
 let sx = 0; lb.addEventListener("touchstart", e => sx = e.touches[0].clientX, {passive:true});
 lb.addEventListener("touchend", e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) show(idx + (dx<0?1:-1)); });
 
 /* Carrousel de l'ouverture */
 const slides = $$(".slide"), dots = $("#dots"), cap = $("#hero-cap");
+if (slides.length) {
 let cur = 0, timer = null;
 const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
 slides.forEach((sl, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", sl.dataset.nom); b.onclick = () => { go(i); restart(); }; dots.appendChild(b); });
 function go(i){
   slides[cur].classList.remove("on"); cur = (i + slides.length) % slides.length; const sl = slides[cur];
   const im = sl.querySelector("img"); if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute("data-src"); }
-  sl.classList.add("on"); cap.textContent = sl.dataset.nom + " →"; cap.href = "#" + sl.dataset.slug;
+  sl.classList.add("on"); cap.textContent = sl.dataset.nom + " →"; cap.href = (DATA.pages && DATA.pages[sl.dataset.slug]) || ("#" + sl.dataset.slug);
   $$("button", dots).forEach((b, k) => b.setAttribute("aria-current", String(k === cur)));
   const nx = slides[(cur + 1) % slides.length].querySelector("img"); if (nx.dataset.src) { nx.src = nx.dataset.src; nx.removeAttribute("data-src"); }
 }
 function restart(){ clearInterval(timer); if (!still) timer = setInterval(() => go(cur + 1), 3500); }
 go(0); restart();
 document.addEventListener("visibilitychange", () => document.hidden ? clearInterval(timer) : restart());
+}
+/* Lien depuis une page domaine : ?d=slug&m=visite#contact */
+const qp = new URLSearchParams(location.search);
+if (qp.get("d") && DOM[qp.get("d")]) { $("#f-domaine").value = qp.get("d"); setMode(qp.get("m") === "visite" ? "visite" : "date"); $("#f-type").value = DOM[qp.get("d")].famille==="mariage" ? "Mariage" : "Week-end entre amis"; }
 })();
 </script>

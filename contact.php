@@ -18,11 +18,11 @@ $AUTO_DATE   = true;   // demandes de date
 
 $DOMAINES = [
   'persine'  => ['nom' => 'Domaine de Persine', 'le' => 'au Domaine de Persine', 'plaquette' => 'plaquettes/plaquette-domaine-de-persine.pdf',
-                 'pitch' => "Ancien bistrot du village de Lusignan restauré dans un esprit chic et champêtre, le domaine dispose d'une salle de réception climatisée de 180 m² ouverte sur une grande terrasse, de 40 couchages et d'un parc clos d'un hectare."],
+                 'pitch' => "Ancien bistrot du village de Lusignan restauré dans un esprit chic et champêtre, le domaine dispose d'une salle de réception climatisée de 180 m² ouverte sur une grande terrasse, de 42 couchages et d'un parc clos d'un hectare."],
   'montbeil' => ['nom' => 'Château de Montbeil', 'le' => 'au Château de Montbeil', 'plaquette' => 'plaquettes/plaquette-chateau-de-montbeil.pdf',
                  'pitch' => "Ancien relais de chasse entièrement rénové en 2020, le château offre 49 couchages, une salle à manger de réception, un chalet de 100 m² pour la soirée et un parc avec kiosque pour votre cérémonie laïque."],
   'borderie' => ['nom' => 'Château de la Borderie', 'le' => 'au Château de la Borderie', 'plaquette' => 'plaquettes/plaquette-chateau-de-la-borderie.pdf',
-                 'pitch' => "Privatisé au cœur d'un parc de 19 hectares, le château accueille jusqu'à 96 personnes entre le château, le gîte et les chalets, avec une salle de réception de 140 m² ouverte sur le parc et une piscine."],
+                 'pitch' => "Privatisé au cœur d'un parc de 19 hectares, le château accueille jusqu'à 93 personnes entre le château, le gîte et les chalets, avec une salle de réception de 140 m² ouverte sur le parc et une piscine."],
   'melior'   => ['nom' => 'Le Clos de Mélior', 'le' => 'au Clos de Mélior', 'plaquette' => '',
                  'pitch' => "Demeure de caractère sur les hauteurs de Lusignan, le Clos de Mélior accueille 12 personnes, avec sa grande cheminée, sa cuisine équipée et sa piscine chauffée."],
   'elinas'   => ['nom' => "La Villa d'Elinas", 'le' => "à la Villa d'Elinas", 'plaquette' => '',

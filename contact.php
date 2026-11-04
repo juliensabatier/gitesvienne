@@ -29,6 +29,10 @@ $DOMAINES = [
                  'pitch' => "Grande maison de famille à Lusignan, la Villa d'Elinas accueille 14 personnes, avec piscine chauffée, billard, baby-foot et salle de fitness."],
 ];
 
+/* Page de chaque domaine (calendrier à jour + tarifs) */
+$PAGES = ['persine' => 'domaine-de-persine/', 'montbeil' => 'chateau-de-montbeil/', 'borderie' => 'chateau-de-la-borderie/',
+          'melior' => 'clos-de-melior/', 'elinas' => 'villa-elinas/'];
+
 function fail($msg, $code = 400) { http_response_code($code); echo json_encode(['ok' => false, 'error' => $msg]); exit; }
 function clean($k, $max = 200) { return trim(mb_substr(str_replace(["\r", "\n"], ' ', (string)($_POST[$k] ?? '')), 0, $max)); }
 function journal($t) { @file_put_contents(__DIR__ . '/cache/contact.log', date('Y-m-d H:i:s') . " $t\n", FILE_APPEND | LOCK_EX); }
@@ -71,7 +75,8 @@ elseif (preg_match('/^\s*(?:\+|00)/', $tel) && preg_match('/^(?:00)?([1-9]\d{8,1
 $waTexte = '';
 if ($wa) {
     $waMsg = "Bonjour $nom, je suis Julien Sabatier, Gîtes Vienne. Merci pour votre demande " . ($objet === 'visite' ? 'de visite ' : '')
-           . "concernant " . ($D ? $D['nom'] : 'nos domaines') . " sur gitesvienne.fr. Je viens de vous envoyer notre présentation par e-mail. "
+           . "concernant " . ($D ? $D['nom'] : 'nos domaines') . " sur gitesvienne.fr, je viens de vous envoyer notre présentation par e-mail.\n\n"
+           . "Nos disponibilités à jour et nos tarifs :\n$SITE/" . ($PAGES[$dom] ?? '') . "\n\n"
            . "Je reste disponible ici pour toute question, pour vérifier vos dates ou organiser une visite.";
     $waTexte = "RÉPONDRE SUR WHATSAPP (message déjà rédigé, à relire puis envoyer) :\nhttps://wa.me/$wa?text=" . rawurlencode($waMsg) . "\n\n";
 }

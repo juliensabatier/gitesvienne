@@ -62,7 +62,20 @@ $domNom = $D ? $D['nom'] : 'Non précisé';
 $lignes = ($objet === 'visite')
   ? "DEMANDE DE VISITE\nJour souhaité : " . ($fr($vdate) ?: '-') . ($vmom ? " ($vmom)" : '') . "\nDate de l'événement : " . ($fr($arr) ?: '-') . ($fr($dep) ? ' au ' . $fr($dep) : '') . "\n"
   : "DEMANDE DE DATE\nArrivée : " . ($fr($arr) ?: '-') . "\nDépart : " . ($fr($dep) ?: '-') . "\n";
-$body = "Nouvelle demande depuis gitesvienne.fr\n\nDomaine : $domNom\nType : $type\n$lignes"
+/* Lien WhatsApp avec un premier message déjà rédigé (mobiles uniquement) */
+$wa = '';
+$td = preg_replace('/\D/', '', $tel);
+if (preg_match('/^0([67]\d{8})$/', $td, $m)) $wa = '33' . $m[1];
+elseif (preg_match('/^(?:00)?(33[67]\d{8})$/', $td, $m)) $wa = $m[1];
+elseif (preg_match('/^\s*(?:\+|00)/', $tel) && preg_match('/^(?:00)?([1-9]\d{8,14})$/', $td, $m) && strpos($m[1], '33') !== 0) $wa = $m[1];
+$waTexte = '';
+if ($wa) {
+    $waMsg = "Bonjour $nom, je suis Julien Sabatier, Gîtes Vienne. Merci pour votre demande " . ($objet === 'visite' ? 'de visite ' : '')
+           . "concernant " . ($D ? $D['nom'] : 'nos domaines') . " sur gitesvienne.fr. Je viens de vous envoyer notre présentation par e-mail. "
+           . "Je reste disponible ici pour toute question, pour vérifier vos dates ou organiser une visite.";
+    $waTexte = "RÉPONDRE SUR WHATSAPP (message déjà rédigé, à relire puis envoyer) :\nhttps://wa.me/$wa?text=" . rawurlencode($waMsg) . "\n\n";
+}
+$body = "Nouvelle demande depuis gitesvienne.fr\n\n$waTexte" . "Domaine : $domNom\nType : $type\n$lignes"
       . "Invités : " . ($nb ?: '-') . "\nCouchages : " . ($couch ?: '-') . "\n\n"
       . "Nom : $nom\nE-mail : $email\nTéléphone : " . ($tel ?: '-') . "\n\nMessage :\n" . ($message ?: '-') . "\n\n"
       . (($objet === 'visite' ? $AUTO_VISITE : $AUTO_DATE) ? "(Un e-mail de présentation a été envoyé automatiquement au client.)\n" : '');

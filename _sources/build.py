@@ -6,6 +6,7 @@ Usage : python3 build.py            -> ../index.html (version OVH)
 import json, sys, html, os
 sys.path.insert(0, os.path.dirname(__file__))
 from data import *
+from themes import THEMES
 
 E = html.escape
 PREVIEW = "--preview" in sys.argv
@@ -179,6 +180,46 @@ def jsonld(only=None):
                          "founder": {"@type": "Person", "name": "Julien Sabatier"}})
     return json.dumps({"@context": "https://schema.org", "@graph": items}, ensure_ascii=False)
 
+def theme_body(t):
+    doms = {d["slug"]: d for d in DOMAINES}
+    intro = "".join(f"<p>{E(x)}</p>" for x in t["intro"])
+    pts = "".join(f"<li><b>{E(a)}</b><span>{E(b)}</span></li>" for a, b in t["points"])
+    faq = "".join(f'<details class="faq__item"><summary>{E(q)}</summary><p>{E(r)}</p></details>' for q, r in t["faq"])
+    others = "".join(f'<a class="btn btn--ghost" href="/{o["slug"]}/">{E(o["eyebrow"])}</a>' for o in THEMES if o["slug"] != t["slug"])
+    cards = "".join(card(doms[s]) for s in t["domaines"])
+    return f'''
+<section class="section section--{t['famille']} theme">
+  <div class="wrap">
+    <p class="eyebrow mark">{E(t['eyebrow'])}</p>
+    <h1 class="theme__h1">{t['h1']}</h1>
+    <div class="theme__intro">{intro}</div>
+    <ul class="theme__pts">{pts}</ul>
+    <div class="actions"><a class="btn" href="/#disponibilites">Voir les dates libres</a><a class="btn btn--ghost" href="#contact" data-ask="" data-mode="visite">Demander une visite</a></div>
+  </div>
+</section>
+<section class="section section--{t['famille']}" style="padding-top:0">
+  <div class="wrap">
+    <div class="cards cards--3">{cards}</div>
+  </div>
+</section>
+<section class="section faq" style="padding-top:0">
+  <div class="wrap faq__wrap">
+    <h2>Questions fréquentes</h2>
+    {faq}
+    <p class="faq__more">Voir aussi : {others} <a class="btn btn--ghost" href="/">Tous les domaines</a></p>
+  </div>
+</section>'''
+
+def theme_jsonld(t):
+    return json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "WebPage", "@id": f"https://gitesvienne.fr/{t['slug']}/", "name": t["title"], "description": t["desc"],
+         "isPartOf": {"@id": "https://gitesvienne.fr/#org"}, "inLanguage": "fr-FR"},
+        {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": r}} for q, r in t["faq"]]},
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Gîtes Vienne", "item": "https://gitesvienne.fr/"},
+            {"@type": "ListItem", "position": 2, "name": t["eyebrow"], "item": f"https://gitesvienne.fr/{t['slug']}/"}]},
+    ] + [biz(d) for d in DOMAINES if d["slug"] in t["domaines"]]}, ensure_ascii=False)
+
 js_data = {
     "domaines": [{k: d[k] for k in ["slug", "famille", "nom", "court", "saisons", "default_saison", "tarifs", "unite", "formule"]} for d in DOMAINES],
     "ical": ICAL, "snapshot": SNAPSHOT, "snapshotDate": SNAPSHOT_DATE, "saisonNom": SAISON_NOM,
@@ -195,6 +236,7 @@ def common(t):
           .replace("%%OPTIONS%%", "".join(f'<option value="{d["slug"]}">{E(d["nom"])}</option>' for d in DOMAINES))
           .replace("%%CHIPS%%", "".join(f'<button type="button" class="chip chip--{d["famille"]}" data-chip="{d["slug"]}" aria-pressed="false">{E(d["court"])}</button>' for d in DOMAINES))
           .replace("%%LINKS%%", "".join(f'<li><a href="{d["site"]}" target="_blank" rel="noopener">{E(d["nom"])}</a></li>' for d in DOMAINES))
+          .replace("%%THEMES%%", "".join(f'<li><a href="{"#" if PREVIEW else "/" + t["slug"] + "/"}">{E(t["eyebrow"])}</a></li>' for t in THEMES))
           .replace("%%EMAIL%%", CONTACT_EMAIL).replace("%%PHONE%%", PHONE).replace("%%PHONE_INTL%%", PHONE_INTL)
           .replace("%%CONSEILLER%%", conseiller(compact=True)).replace("%%SLIDES%%", slides())
           .replace("%%AVIS_HOME%%", avis_home()[0]).replace("%%AVIS_TOTAL%%", str(avis_home()[1]))
@@ -238,9 +280,25 @@ else:
         page = page.replace('fetch("ical.php"', 'fetch("/ical.php"').replace('fetch("contact.php"', 'fetch("/contact.php"')
         page = page.replace('href="#accueil"', 'href="/"').replace('href="#mariages"', 'href="/#mariages"').replace('href="#week-ends"', 'href="/#week-ends"').replace('href="#avis"', 'href="/#avis"').replace('href="#disponibilites"', 'href="/#disponibilites"')
         write(os.path.join(ROOT, url.strip("/"), "index.html"), wrap(page, "/img/favicon.png"))
+    for t in THEMES:
+        url = f"/{t['slug']}/"
+        page = common(tpl.replace("%%TITLE%%", E(t["title"])))
+        a, b = page.split("<!--HOME-->"); _, c = b.split("<!--/HOME-->")
+        page = a + theme_body(t) + c
+        page = page.replace("%%FICHES%%", "").replace("%%JSONLD%%", theme_jsonld(t))
+        page = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{E(t["desc"])}">', page, count=1)
+        page = page.replace('<link rel="canonical" href="https://gitesvienne.fr/">', f'<link rel="canonical" href="https://gitesvienne.fr{url}">')
+        page = page.replace('<meta property="og:url" content="https://gitesvienne.fr/">', f'<meta property="og:url" content="https://gitesvienne.fr{url}">')
+        page = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{E(t["title"])}">', page, count=1)
+        page = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{E(t["desc"])}">', page, count=1)
+        page = re.sub(r'(?<=[\s"(,])(img|plaquettes)/', r'/\1/', page)
+        page = page.replace('fetch("ical.php"', 'fetch("/ical.php"').replace('fetch("contact.php"', 'fetch("/contact.php"')
+        page = page.replace('href="#accueil"', 'href="/"').replace('href="#mariages"', 'href="/#mariages"').replace('href="#week-ends"', 'href="/#week-ends"').replace('href="#avis"', 'href="/#avis"').replace('href="#disponibilites"', 'href="/#disponibilites"')
+        write(os.path.join(ROOT, t["slug"], "index.html"), wrap(page, "/img/favicon.png"))
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
           '  <url><loc>https://gitesvienne.fr/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>']
     sm += [f'  <url><loc>https://gitesvienne.fr{PAGES[d["slug"]][0]}</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>' for d in DOMAINES]
+    sm += [f'  <url><loc>https://gitesvienne.fr/{t["slug"]}/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>' for t in THEMES]
     sm += [f'  <url><loc>https://gitesvienne.fr/{p}</loc></url>' for p in PLAQUETTES.values()]
     sm.append('</urlset>')
     write(os.path.join(ROOT, "sitemap.xml"), "\n".join(sm) + "\n")

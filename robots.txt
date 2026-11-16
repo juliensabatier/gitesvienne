@@ -1,5 +1,24 @@
+# gitesvienne.fr : moteurs de recherche et assistants IA bienvenus
 User-agent: *
 Allow: /
 Disallow: /cache/
 Disallow: /_sources/
+
+# Assistants IA et moteurs de réponse (citations dans ChatGPT, Claude, Perplexity, Gemini, Copilot)
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: OAI-SearchBot
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Bingbot
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /cache/
+Disallow: /_sources/
+
 Sitemap: https://gitesvienne.fr/sitemap.xml

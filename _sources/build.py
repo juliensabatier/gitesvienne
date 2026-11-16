@@ -267,6 +267,110 @@ def theme_jsonld(t):
             {"@type": "ListItem", "position": 2, "name": t["eyebrow"], "item": f"https://gitesvienne.fr/{t['slug']}/"}]},
     ] + [biz(d) for d in DOMAINES if d["slug"] in t["domaines"]]}, ensure_ascii=False)
 
+# ---------- Référencement IA : questions fréquentes par domaine, llms.txt, tarifs.md ----------
+import datetime
+MAJ = datetime.date.today()
+MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
+MAJ_TXT = f"{MAJ.day} {MOIS[MAJ.month - 1]} {MAJ.year}"
+
+def nb(n):
+    return f"{n:,}".replace(",", " ")
+
+def faq_domaine(d):
+    """Questions fréquentes construites uniquement à partir des données vérifiées (data.py)."""
+    s, nom = SCHEMA[d["slug"]], d["nom"]
+    order = [k for k in ["C", "B", "M", "H", "W"] if k in d["tarifs"]]
+    lo, hi = d["tarifs"][order[0]], max(d["tarifs"].values())
+    q = []
+    if d["famille"] == "mariage":
+        q.append((f"Combien d'invités peut-on recevoir au {nom} ?",
+                  f"Le {nom} reçoit jusqu'à {s['convives']} convives assis pour le repas et dispose de {s['couchages']} couchages sur place{" (24 au château, le reste au gîte et dans les chalets, en option)" if d["slug"] == "borderie" else " : vos invités dorment au domaine tout le week-end"}."))
+        q.append((f"Quel est le prix de location du {nom} pour un mariage ?",
+                  f"La location démarre à {eur(lo)} {d['unite']} en {SAISON_NOM[order[0]].lower()} et va jusqu'à {eur(hi)} en haute saison ({d['periodes']['H'].lower()}). Formule : {d['formule'].lower()}. Le détail des saisons et des options figure dans le tableau des tarifs de cette page."))
+        q.append((f"Peut-on choisir son traiteur au {nom} ?",
+                  "Oui. Le domaine dispose d'une cuisine dédiée au traiteur de votre choix, et nous vous transmettons notre liste de prestataires sur demande."))
+    else:
+        q.append((f"Combien de personnes peut accueillir {nom} ?",
+                  f"{nom} accueille {s['couchages']} personnes dans {s['chambres']} chambres, à Lusignan, dans la Vienne."))
+        q.append((f"Quel est le prix d'un week-end à {nom} ?",
+                  f"À partir de {eur(lo)} {d['unite']}, pour {d['periodes']['W'][len('Week-end, '):].lower()}. Le tarif est confirmé selon les dates et le nombre de personnes."))
+        q.append(("La piscine est-elle chauffée ?", f"Oui, {nom} dispose d'une piscine chauffée."))
+    q.append((f"Où se trouve {'le ' + nom if d['famille'] == 'mariage' else nom} ?", f"{d['adresse']}. Accès : {d['acces']}"))
+    q.append(("Comment voir les dates libres ?",
+              "Le calendrier de cette page se met à jour automatiquement depuis notre planning de réservation : les jours barrés sont déjà réservés. "
+              f"Choisissez vos dates pour voir le tarif, puis envoyez votre demande ; vous pouvez aussi nous joindre au {PHONE}."))
+    return q
+
+def faq_html(d):
+    items = "".join(f'<details class="faq__item"><summary>{E(a)}</summary><p>{E(b)}</p></details>' for a, b in faq_domaine(d))
+    return f'''<div class="wrap faq__wrap fiche__faq">
+    <h2>Questions fréquentes sur {"le " if d["famille"] == "mariage" else ""}{E(d["nom"])}</h2>
+    {items}
+    <p class="hint">Tarifs et informations mis à jour le {MAJ_TXT}. Disponibilités en temps réel.</p>
+  </div>'''
+
+def page_jsonld(d):
+    url = f"{SITE}{PAGES[d['slug']][0]}"
+    return json.dumps({"@context": "https://schema.org", "@graph": [
+        {"@type": "WebPage", "@id": f"{url}#page", "url": url, "name": PAGES[d["slug"]][1], "description": PAGES[d["slug"]][2],
+         "inLanguage": "fr-FR", "dateModified": MAJ.isoformat(), "isPartOf": {"@id": f"{SITE}/#website"},
+         "about": {"@id": f"{url}#lieu"}, "author": {"@id": f"{SITE}/#julien-sabatier"}},
+        {"@type": "Person", "@id": f"{SITE}/#julien-sabatier", "name": f"{CONSEILLER['prenom']} {CONSEILLER['nom']}",
+         "jobTitle": CONSEILLER["role"], "image": f"{SITE}/{CONSEILLER['photo']}", "telephone": PHONE_INTL},
+        biz(d),
+        {"@type": "FAQPage", "@id": f"{url}#faq", "mainEntity": [{"@type": "Question", "name": a, "acceptedAnswer": {"@type": "Answer", "text": b}} for a, b in faq_domaine(d)]},
+        {"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Gîtes Vienne", "item": f"{SITE}/"},
+            {"@type": "ListItem", "position": 2, "name": d["nom"], "item": url}]},
+    ]}, ensure_ascii=False)
+
+def tarifs_md():
+    L = [f"# Tarifs : Gîtes Vienne (gitesvienne.fr)", "",
+         f"Mis à jour le {MAJ_TXT}. Prix en euros TTC, location du lieu entier. Disponibilités en temps réel sur chaque page du site.",
+         f"Réservation et visites : {CONSEILLER['prenom']} {CONSEILLER['nom']}, {PHONE}, {CONTACT_EMAIL}.", ""]
+    for d in DOMAINES:
+        s = SCHEMA[d["slug"]]
+        L += [f"## {d['nom']} · {d['lieu']}", "",
+              f"- Page : {SITE}{PAGES[d['slug']][0]}",
+              f"- Type : {'domaine de mariage et de réception' if d['famille'] == 'mariage' else 'gîte de groupe'}",
+              f"- Capacité : {s['couchages']} couchages" + (f", {s['convives']} convives assis" if s.get("convives") else ""),
+              f"- Formule : {d['formule']}", ""]
+        order = [k for k in ["H", "M", "B", "C", "W"] if k in d["tarifs"]]
+        L += ["| Saison | Période | Prix |", "|---|---|---|"]
+        L += [f"| {SAISON_NOM[k]} | {d['periodes'][k]} | {nb(d['tarifs'][k])} € {d['unite']} |" for k in order]
+        if d["famille"] == "gite":
+            L += ["", "Tarif « à partir de », confirmé selon les dates et le nombre de personnes."]
+        if d["options"]:
+            L += ["", "Options :"] + [f"- {a} : {b}" for a, b in d["options"]]
+        if d["slug"] in PLAQUETTES:
+            L += ["", f"Plaquette complète (PDF) : {SITE}/{PLAQUETTES[d['slug']]}"]
+        L.append("")
+    return "\n".join(L)
+
+def llms_txt():
+    L = ["# Gîtes Vienne", "",
+         f"> Cinq lieux à louer en entier autour de Lusignan, dans la Vienne (86) et en Charente (16) : trois domaines de mariage privatisés (Domaine de Persine, Château de Montbeil, Château de la Borderie) et deux gîtes de groupe avec piscine chauffée (Le Clos de Mélior, La Villa d'Elinas), près de Poitiers et du Futuroscope. Calendriers de disponibilité en temps réel et tarifs publics.", "",
+         f"Interlocuteur unique pour les cinq lieux : {CONSEILLER['prenom']} {CONSEILLER['nom']}, {PHONE}, {CONTACT_EMAIL}. Visites sur rendez-vous.",
+         f"Informations mises à jour le {MAJ_TXT}.", "",
+         "## Les domaines", ""]
+    for d in DOMAINES:
+        s = SCHEMA[d["slug"]]
+        cap = f"{s['couchages']} couchages" + (f", {s['convives']} convives assis" if s.get("convives") else "")
+        av = AVIS.get(d["slug"])
+        note = f", note Google {av['note']}/5 ({av['nb']} avis)" if av else ""
+        L.append(f"- [{d['nom']}]({SITE}{PAGES[d['slug']][0]}): {d['lieu']}. {d['accroche']} {cap}. {s['prix']}{note}.")
+    L += ["", "## Par besoin", ""]
+    L += [f"- [{t['eyebrow']}]({SITE}/{t['slug']}/): {t['desc']}" for t in THEMES]
+    L += ["", "## Informations pratiques", "",
+          f"- [Tarifs détaillés de tous les domaines]({SITE}/tarifs.md): saisons, prix et options en texte simple",
+          f"- [Calendrier des dates libres]({SITE}/#disponibilites): disponibilités des cinq lieux, mises à jour automatiquement",
+          f"- [Avis clients]({SITE}/#avis): extraits des avis Google de chaque domaine",
+          f"- [Demander une date ou une visite]({SITE}/#contact): formulaire, réponse avec la plaquette du domaine", "",
+          "## Optional", ""]
+    L += [f"- [Plaquette {d['nom']}]({SITE}/{PLAQUETTES[d['slug']]})" for d in DOMAINES if d["slug"] in PLAQUETTES]
+    L += [f"- [Site historique {d['nom']}]({d['site']})" for d in DOMAINES]
+    return "\n".join(L) + "\n"
+
 js_data = {
     "domaines": [{k: d[k] for k in ["slug", "famille", "nom", "court", "saisons", "default_saison", "tarifs", "unite", "formule"]} for d in DOMAINES],
     "ical": ICAL, "snapshot": SNAPSHOT, "snapshotDate": SNAPSHOT_DATE, "saisonNom": SAISON_NOM,
@@ -311,12 +415,13 @@ else:
         f = fiche(d).replace(' hidden aria-labelledby', ' aria-labelledby').replace(f'class="fiche fiche--{d["famille"]}"', f'class="fiche fiche--{d["famille"]} fiche--page"')
         f = f.replace(f'<h2 id="t-{d["slug"]}">', f'<h1 id="t-{d["slug"]}">').replace(f'{E(d["nom"])}</h2><p>', f'{E(d["nom"])}</h1><p>', 1)
         f = f.replace('href="#domaines"', 'href="/#mariages"')
+        f = f.replace('<div class="wrap fiche__avis">', faq_html(d) + '\n  <div class="wrap fiche__avis">', 1)
         f = re.sub(r'href="#contact" data-ask="(\w+)" data-mode="(\w+)"', r'href="/?d=\1&amp;m=\2#contact" data-ask="\1" data-mode="\2"', f)
         f = re.sub(r'href="#contact" data-ask="(\w+)"', r'href="/?d=\1#contact" data-ask="\1"', f)
         page = common(tpl.replace("%%TITLE%%", E(ttl)))
         a, b = page.split("<!--HOME-->"); _, c = b.split("<!--/HOME-->")
         page = a + f + c
-        page = page.replace("%%FICHES%%", "").replace("%%JSONLD%%", jsonld(d["slug"]))
+        page = page.replace("%%FICHES%%", "").replace("%%JSONLD%%", page_jsonld(d))
         page = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{E(desc)}">', page, count=1)
         page = page.replace('<link rel="canonical" href="https://gitesvienne.fr/">', f'<link rel="canonical" href="https://gitesvienne.fr{url}">')
         page = page.replace('<meta property="og:url" content="https://gitesvienne.fr/">', f'<meta property="og:url" content="https://gitesvienne.fr{url}">')
@@ -349,3 +454,5 @@ else:
     sm += [f'  <url><loc>https://gitesvienne.fr/{p}</loc></url>' for p in PLAQUETTES.values()]
     sm.append('</urlset>')
     write(os.path.join(ROOT, "sitemap.xml"), "\n".join(sm) + "\n")
+    write(os.path.join(ROOT, "llms.txt"), llms_txt())
+    write(os.path.join(ROOT, "tarifs.md"), tarifs_md())

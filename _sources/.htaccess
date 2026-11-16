@@ -1,1 +1,17 @@
-Require all denied
+# gitesvienne.fr
+AddDefaultCharset UTF-8
+AddType "text/markdown; charset=utf-8" .md
+AddType "text/plain; charset=utf-8" .txt
+Options -Indexes
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType video/mp4 "access plus 30 days"
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json
+</IfModule>
+<FilesMatch "^(cache|build)">
+  Require all denied
+</FilesMatch>

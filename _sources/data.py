@@ -235,3 +235,57 @@ SNAPSHOT = {
  "2ea51c1a-5ac9-44fc-a307-28838fd3a6d9": "20261205-20261207 20261225-20261228 20261230-20270103 20270122-20270124 20270326-20270330 20270515-20270518 20270528-20270531 20270611-20270614 20270918-20270920 20271022-20271024",
  "b491cb0c-c3e6-4185-98a6-0a85ec198341": "20261127-20261130 20261204-20261207 20261219-20261222 20261224-20261228 20261230-20270104 20270108-20270111 20270115-20270118 20270122-20270125 20270205-20270208 20270326-20270330 20270402-20270405 20270416-20270419 20270505-20270510 20270515-20270518 20270528-20270531 20270723-20270726 20270910-20270913 20271021-20271025",
 }
+
+# Données structurées (schema.org) : textes et caractéristiques propres à Google.
+# Le nom, l'adresse web, le téléphone et le prix « à partir de » viennent des blocs DOMAINES ci-dessus.
+SITE_DESC = "Domaines de mariage et gîtes de groupe autour de Lusignan, dans la Vienne (86) et en Charente (16)."
+SITE_PAGE_DESC = "Gîtes et domaines de mariage dans la Vienne (86) : Persine, Montbeil, la Borderie, le Clos de Mélior et la Villa d'Elinas, près de Poitiers et du Futuroscope. Grands gîtes de groupe, tarifs et disponibilités en ligne."
+ORG_DESC = "Domaines de mariage et gîtes de groupe autour de Lusignan, dans la Vienne et en Charente : Domaine de Persine, Château de Montbeil, Château de la Borderie, Le Clos de Mélior et La Villa d'Elinas."
+ORG_SAVOIRS = ["Domaine de mariage", "Gîte de groupe", "Location de château pour mariage", "Séminaire d'entreprise", "Fête de famille", "Week-end au Futuroscope"]
+SCHEMA = {
+  "persine": {
+    "description": "Domaine de mariage à Lusignan (Vienne) : l'ancien bistrot du village, restauré dans un esprit chic et champêtre, avec son parc clos d'un hectare. Location du domaine entier pour le week-end, 150 convives assis et 42 couchages sur place.",
+    "images": ["persine-card.jpg", "persine-01.jpg"],
+    "rue": "3 rue de la Roche Grolleau", "cp": "86600", "ville": "Lusignan", "departement": "Vienne (86)",
+    "convives": 150, "hebergement": "Hébergement du Domaine de Persine", "couchages": 42,
+    "equipements": ["Salle de réception climatisée de 180 m²", "Parc clos d'un hectare", "Cuisine équipée pour traiteur"],
+    "prix": "À partir de 2 700 € le week-end", "offre": "Location du domaine entier pour le week-end",
+    "sites": ["https://www.domainedepersine.fr/"],
+  },
+  "montbeil": {
+    "description": "Château pour mariage à Boivre-la-Vallée (Vienne) : un ancien relais de chasse entièrement rénové en 2020, son escalier romantique et son parc à kiosque. 80 convives assis et 49 couchages sur place.",
+    "images": ["montbeil-card.jpg", "montbeil-01.jpg"],
+    "rue": "9 lieu-dit Montbeil", "cp": "86470", "ville": "Boivre-la-Vallée", "departement": "Vienne (86)",
+    "convives": 80, "hebergement": "Hébergement du Château de Montbeil", "couchages": 49,
+    "equipements": ["750 m² habitables", "Parc de 5 000 m² avec kiosque", "Cuisine équipée pour traiteur"],
+    "prix": "À partir de 2 700 € le week-end", "offre": "Location du château entier pour le week-end",
+    "sites": ["https://www.chateaudemontbeil.com/"],
+  },
+  "borderie": {
+    "description": "Château privatisé pour mariage à Benest (Charente) : un parc de 19 hectares avec piscine, gîte et chalets. 120 convives assis et 93 couchages sur place.",
+    "images": ["borderie-card.jpg", "borderie-13.jpg"],
+    "rue": "Château de la Borderie", "cp": "16350", "ville": "Benest", "departement": "Charente (16)",
+    "convives": 120, "hebergement": "Hébergements du Château de la Borderie (château, gîte et chalets)", "couchages": 93,
+    "equipements": ["Salle de réception de 140 m²", "Parc de 19 hectares", "Piscine", "Cuisine équipée pour traiteur"],
+    "prix": "À partir de 6 380 € les 2 nuits", "offre": "Privatisation du château pour 2 nuits",
+    "sites": ["https://www.chateaudelaborderie.com/fr/"],
+  },
+  "melior": {
+    "description": "Gîte de groupe dans le bourg médiéval de Lusignan (Vienne) : une demeure du XVe siècle avec grande cheminée et piscine chauffée, 12 couchages et 4 chambres, à 20 minutes du Futuroscope.",
+    "images": ["melior-card.jpg"],
+    "rue": None, "cp": "86600", "ville": "Lusignan", "departement": "Vienne (86)",
+    "hebergement": "Le Clos de Mélior", "couchages": 12, "chambres": 4,
+    "equipements": ["Piscine chauffée", "Grande cheminée", "Demeure du XVe siècle"],
+    "prix": "À partir de 600 € le week-end", "offre": "Location du gîte pour le week-end",
+    "sites": [],
+  },
+  "elinas": {
+    "description": "Gîte de groupe à Lusignan (Vienne) : une grande maison de famille avec piscine chauffée, billard, baby-foot et salle de fitness, 14 couchages, 6 chambres et 4 salles de bain.",
+    "images": ["elinas-card.jpg"],
+    "rue": None, "cp": "86600", "ville": "Lusignan", "departement": "Vienne (86)",
+    "hebergement": "La Villa d'Elinas", "couchages": 14, "chambres": 6, "sdb": 4,
+    "equipements": ["Piscine chauffée", "Billard", "Baby-foot", "Salle de fitness"],
+    "prix": "À partir de 800 € le week-end", "offre": "Location du gîte pour le week-end",
+    "sites": [],
+  },
+}

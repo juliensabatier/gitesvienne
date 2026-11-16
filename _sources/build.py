@@ -164,21 +164,68 @@ def fiche(d):
   <div class="wrap fiche__cons">{conseiller(d['slug'])}</div>
 </section>'''
 
+SITE = "https://gitesvienne.fr"
+
 def biz(d):
-    return {"@type": ["LodgingBusiness", "EventVenue"], "@id": f"https://gitesvienne.fr{PAGES[d['slug']][0]}#lieu",
-            "name": d["nom"], "description": d["accroche"],
-            "address": {"@type": "PostalAddress", "streetAddress": d["adresse"], "addressRegion": "Nouvelle-Aquitaine", "addressCountry": "FR"},
-            "url": f"https://gitesvienne.fr{PAGES[d['slug']][0]}", "image": f"https://gitesvienne.fr/img/{d['slug']}-card.jpg",
-            "telephone": PHONE_INTL, "priceRange": f"à partir de {min_price(d)} €",
-            "sameAs": [d["site"], avis_url(d["slug"])]}
+    """Fiche schema.org d'un domaine (même contenu sur toutes les pages qui la citent)."""
+    s, url = SCHEMA[d["slug"]], f"{SITE}{PAGES[d['slug']][0]}"
+    imgs = [f"{SITE}/img/{i}" for i in s["images"]]
+    adr = {"@type": "PostalAddress"}
+    if s.get("rue"): adr["streetAddress"] = s["rue"]
+    adr.update({"postalCode": s["cp"], "addressLocality": s["ville"], "addressRegion": "Nouvelle-Aquitaine", "addressCountry": "FR"})
+    logement = {"@type": "Accommodation", "name": s["hebergement"]}
+    if s.get("chambres"): logement["numberOfRooms"] = s["chambres"]
+    if s.get("sdb"): logement["numberOfBathroomsTotal"] = s["sdb"]
+    logement["occupancy"] = {"@type": "QuantitativeValue", "maxValue": s["couchages"], "unitText": "couchages"}
+    mariage = d["famille"] == "mariage"
+    b = {"@type": ["LodgingBusiness", "EventVenue"] if mariage else "LodgingBusiness", "@id": f"{url}#lieu",
+         "name": d["nom"], "description": s["description"], "url": url,
+         "image": imgs if len(imgs) > 1 else imgs[0],
+         "telephone": PHONE_INTL, "email": CONTACT_EMAIL, "address": adr,
+         "containedInPlace": {"@type": "AdministrativeArea", "name": s["departement"]},
+         "hasMap": avis_url(d["slug"])}
+    if s.get("convives"): b["maximumAttendeeCapacity"] = s["convives"]
+    if s.get("chambres"): b["numberOfRooms"] = s["chambres"]
+    b["containsPlace"] = logement
+    b["amenityFeature"] = [{"@type": "LocationFeatureSpecification", "name": e, "value": True} for e in s["equipements"]]
+    b["priceRange"] = s["prix"]
+    b["makesOffer"] = {"@type": "Offer", "name": s["offre"], "price": min_price(d), "priceCurrency": "EUR", "url": url}
+    b["parentOrganization"] = {"@id": f"{SITE}/#org"}
+    b["sameAs"] = s["sites"] + [avis_url(d["slug"])]
+    return b
+
+def org():
+    return {"@type": "Organization", "@id": f"{SITE}/#org", "name": "Gîtes Vienne", "url": f"{SITE}/",
+            "description": ORG_DESC, "email": CONTACT_EMAIL, "telephone": PHONE_INTL,
+            "logo": {"@type": "ImageObject", "url": f"{SITE}/img/favicon.png"},
+            "founder": {"@id": f"{SITE}/#julien-sabatier"},
+            "contactPoint": {"@type": "ContactPoint", "contactType": "reservations", "telephone": PHONE_INTL,
+                             "email": CONTACT_EMAIL, "availableLanguage": "fr"},
+            "areaServed": [{"@type": "AdministrativeArea", "name": "Vienne (86)"}, {"@type": "AdministrativeArea", "name": "Charente (16)"}],
+            "knowsAbout": ORG_SAVOIRS}
 
 def jsonld(only=None):
-    items = [biz(d) for d in DOMAINES if only is None or d["slug"] == only]
-    if only is None:
-        items.insert(0, {"@type": "Organization", "@id": "https://gitesvienne.fr/#org", "name": "Gîtes Vienne", "url": "https://gitesvienne.fr/",
-                         "email": CONTACT_EMAIL, "telephone": PHONE_INTL, "logo": "https://gitesvienne.fr/img/favicon.png",
-                         "founder": {"@type": "Person", "name": "Julien Sabatier"}})
-    return json.dumps({"@context": "https://schema.org", "@graph": items}, ensure_ascii=False)
+    if only is not None:
+        return json.dumps({"@context": "https://schema.org", "@graph": [biz(d) for d in DOMAINES if d["slug"] == only]}, ensure_ascii=False)
+    graph = [
+        {"@type": "WebSite", "@id": f"{SITE}/#website", "url": f"{SITE}/", "name": "Gîtes Vienne",
+         "description": SITE_DESC, "inLanguage": "fr-FR", "publisher": {"@id": f"{SITE}/#org"}},
+        {"@type": "WebPage", "@id": f"{SITE}/#webpage", "url": f"{SITE}/",
+         "name": "Gîtes Vienne · Domaines de mariage et gîtes de groupe dans la Vienne (86)",
+         "description": SITE_PAGE_DESC, "inLanguage": "fr-FR",
+         "isPartOf": {"@id": f"{SITE}/#website"}, "about": {"@id": f"{SITE}/#org"},
+         "primaryImageOfPage": {"@type": "ImageObject", "url": f"{SITE}/img/borderie-card.jpg"},
+         "mainEntity": {"@id": f"{SITE}/#domaines"},
+         "relatedLink": [f"{SITE}/{t['slug']}/" for t in THEMES]},
+        org(),
+        {"@type": "Person", "@id": f"{SITE}/#julien-sabatier", "name": f"{CONSEILLER['prenom']} {CONSEILLER['nom']}",
+         "image": f"{SITE}/{CONSEILLER['photo']}", "worksFor": {"@id": f"{SITE}/#org"}},
+        {"@type": "ItemList", "@id": f"{SITE}/#domaines", "name": "Domaines de mariage et gîtes de groupe autour de Lusignan",
+         "numberOfItems": len(DOMAINES),
+         "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{SITE}{PAGES[d['slug']][0]}#lieu"}}
+                             for i, d in enumerate(DOMAINES)]},
+    ] + [biz(d) for d in DOMAINES]
+    return json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
 
 def theme_body(t):
     doms = {d["slug"]: d for d in DOMAINES}

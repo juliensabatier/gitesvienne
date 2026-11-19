@@ -204,6 +204,8 @@ def org():
             "areaServed": [{"@type": "AdministrativeArea", "name": "Vienne (86)"}, {"@type": "AdministrativeArea", "name": "Charente (16)"}],
             "knowsAbout": ORG_SAVOIRS}
 
+FAQ_HOME = next(t["faq"] for t in THEMES if t["slug"] == "gite-mariage-vienne")
+
 def jsonld(only=None):
     if only is not None:
         return json.dumps({"@context": "https://schema.org", "@graph": [biz(d) for d in DOMAINES if d["slug"] == only]}, ensure_ascii=False)
@@ -217,6 +219,7 @@ def jsonld(only=None):
          "primaryImageOfPage": {"@type": "ImageObject", "url": f"{SITE}/img/borderie-card.jpg"},
          "mainEntity": {"@id": f"{SITE}/#domaines"},
          "relatedLink": [f"{SITE}/{t['slug']}/" for t in THEMES]},
+        {"@type": "FAQPage", "@id": f"{SITE}/#faq", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": r}} for q, r in FAQ_HOME]},
         org(),
         {"@type": "Person", "@id": f"{SITE}/#julien-sabatier", "name": f"{CONSEILLER['prenom']} {CONSEILLER['nom']}",
          "image": f"{SITE}/{CONSEILLER['photo']}", "worksFor": {"@id": f"{SITE}/#org"}},
@@ -391,6 +394,7 @@ def common(t):
           .replace("%%EMAIL%%", CONTACT_EMAIL).replace("%%PHONE%%", PHONE).replace("%%PHONE_INTL%%", PHONE_INTL)
           .replace("%%CONSEILLER%%", conseiller(compact=True)).replace("%%SLIDES%%", slides())
           .replace("%%AVIS_HOME%%", avis_home()[0]).replace("%%AVIS_TOTAL%%", str(avis_home()[1]))
+          .replace("%%FAQ_HOME%%", "".join(f'<details class="faq__item"><summary>{E(q)}</summary><p>{E(r)}</p></details>' for q, r in FAQ_HOME))
           .replace("%%DATA%%", json.dumps(js_data, ensure_ascii=False)))
 
 def wrap(out, favicon="img/favicon.png"):
@@ -430,7 +434,7 @@ else:
         # chemins absolus
         page = re.sub(r'(?<=[\s"(,])(img|plaquettes)/', r'/\1/', page)
         page = page.replace('fetch("ical.php"', 'fetch("/ical.php"').replace('fetch("contact.php"', 'fetch("/contact.php"')
-        page = page.replace('href="#accueil"', 'href="/"').replace('href="#mariages"', 'href="/#mariages"').replace('href="#week-ends"', 'href="/#week-ends"').replace('href="#avis"', 'href="/#avis"').replace('href="#disponibilites"', 'href="/#disponibilites"')
+        page = page.replace('href="#accueil"', 'href="/"').replace('href="#mariages"', 'href="/#mariages"').replace('href="#week-ends"', 'href="/#week-ends"').replace('href="#avis"', 'href="/#avis"').replace('href="#disponibilites"', 'href="/#disponibilites"').replace('href="#faq"', 'href="/#faq"')
         write(os.path.join(ROOT, url.strip("/"), "index.html"), wrap(page, "/img/favicon.png"))
     for t in THEMES:
         url = f"/{t['slug']}/"
@@ -445,7 +449,7 @@ else:
         page = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{E(t["desc"])}">', page, count=1)
         page = re.sub(r'(?<=[\s"(,])(img|plaquettes)/', r'/\1/', page)
         page = page.replace('fetch("ical.php"', 'fetch("/ical.php"').replace('fetch("contact.php"', 'fetch("/contact.php"')
-        page = page.replace('href="#accueil"', 'href="/"').replace('href="#mariages"', 'href="/#mariages"').replace('href="#week-ends"', 'href="/#week-ends"').replace('href="#avis"', 'href="/#avis"').replace('href="#disponibilites"', 'href="/#disponibilites"')
+        page = page.replace('href="#accueil"', 'href="/"').replace('href="#mariages"', 'href="/#mariages"').replace('href="#week-ends"', 'href="/#week-ends"').replace('href="#avis"', 'href="/#avis"').replace('href="#disponibilites"', 'href="/#disponibilites"').replace('href="#faq"', 'href="/#faq"')
         write(os.path.join(ROOT, t["slug"], "index.html"), wrap(page, "/img/favicon.png"))
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
           '  <url><loc>https://gitesvienne.fr/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>']

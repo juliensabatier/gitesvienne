@@ -231,6 +231,64 @@ def jsonld(only=None):
     ] + [biz(d) for d in DOMAINES]
     return json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
 
+def devis_form():
+    return r'''
+<section class="section" id="demande-devis" style="padding-top:0">
+  <div class="wrap">
+    <p class="eyebrow mark">Devis sur mesure</p>
+    <h2>Demandez un devis <i>pour votre entreprise</i></h2>
+    <p>Décrivez votre séminaire : je vous envoie un devis détaillé, adapté à votre nombre de participants, à la restauration et à l'hébergement souhaités.</p>
+    <form id="devis-form" novalidate>
+      <label>Entreprise<input name="Entreprise" autocomplete="organization" required></label>
+      <label>Nom et prénom<input name="Contact" autocomplete="name" required></label>
+      <label>E-mail<input name="E-mail" type="email" autocomplete="email" required></label>
+      <label>Téléphone<input name="Téléphone" type="tel" autocomplete="tel"></label>
+      <label>Date souhaitée<input name="Date souhaitée" type="date"></label>
+      <label>Durée<select name="Durée"><option>Une journée</option><option>Une demi-journée</option><option>Deux jours</option><option>Trois jours ou plus</option><option>À définir</option></select></label>
+      <label>Nombre de participants<input name="Participants" type="number" min="1" max="200" inputmode="numeric"></label>
+      <label>Personnes à loger (nuitées)<input name="Personnes à loger" type="number" min="0" max="66" inputmode="numeric" placeholder="0 si pas d'hébergement"></label>
+      <label class="full">Configuration de la salle<select name="Configuration"><option>Réunion en théâtre (rangs de chaises)</option><option>Tables en U</option><option>Salle de classe</option><option>Tables rondes (ateliers)</option><option>Cocktail debout</option><option>À définir ensemble</option></select></label>
+      <fieldset class="mode full"><legend>Restauration souhaitée</legend>
+        <label><input type="checkbox" name="Restauration" value="Accueil café et viennoiseries"> Accueil café</label>
+        <label><input type="checkbox" name="Restauration" value="Pauses café"> Pauses café</label>
+        <label><input type="checkbox" name="Restauration" value="Déjeuner"> Déjeuner</label>
+        <label><input type="checkbox" name="Restauration" value="Dîner"> Dîner</label>
+        <label><input type="checkbox" name="Restauration" value="Cocktail"> Cocktail</label>
+        <label><input type="checkbox" name="Restauration" value="Petit-déjeuner (résidentiel)"> Petit-déjeuner</label>
+      </fieldset>
+      <label class="full">Traiteur<select name="Traiteur"><option>Je souhaite que vous me proposiez un traiteur</option><option>J'ai déjà mon traiteur</option><option>Pas de repas sur place</option></select></label>
+      <fieldset class="mode full"><legend>Matériel</legend>
+        <label><input type="checkbox" name="Matériel" value="Vidéoprojecteur"> Vidéoprojecteur</label>
+        <label><input type="checkbox" name="Matériel" value="Écran TV"> Écran TV</label>
+        <label><input type="checkbox" name="Matériel" value="Paperboard"> Paperboard</label>
+        <label><input type="checkbox" name="Matériel" value="Wi-Fi"> Wi-Fi</label>
+        <label><input type="checkbox" name="Matériel" value="Sonorisation / micro"> Sono, micro</label>
+        <label><input type="checkbox" name="Matériel" value="Activité team building"> Team building</label>
+      </fieldset>
+      <label class="full">Précisions sur votre projet<textarea name="Précisions" rows="4" placeholder="Programme, horaires, régimes alimentaires, budget, autres besoins..."></textarea></label>
+      <div class="full"><button class="btn btn--block" type="submit">Envoyer ma demande de devis</button></div>
+      <p class="full formule">Le bouton ouvre votre messagerie avec votre demande déjà rédigée, adressée à <a href="mailto:contact@gitesvienne.fr">contact@gitesvienne.fr</a>. Il ne vous reste qu'à l'envoyer. Vous pouvez aussi appeler le 06 18 70 82 19.</p>
+    </form>
+  </div>
+</section>
+<script>
+(function(){
+  var f = document.getElementById("devis-form"); if (!f) return;
+  f.addEventListener("submit", function(e){
+    e.preventDefault();
+    var req = f.querySelectorAll("[required]");
+    for (var i = 0; i < req.length; i++) { if (!req[i].value.trim()) { req[i].focus(); req[i].reportValidity && req[i].reportValidity(); return; } }
+    var d = {}, order = [];
+    new FormData(f).forEach(function(v, k){ v = String(v).trim(); if (!v) return; if (!(k in d)) { d[k] = []; order.push(k); } d[k].push(v); });
+    if (d["Date souhaitée"]) { var p = d["Date souhaitée"][0].split("-"); if (p.length === 3) d["Date souhaitée"] = [p[2] + "/" + p[1] + "/" + p[0]]; }
+    var lignes = order.map(function(k){ return k + " : " + d[k].join(", "); });
+    var corps = "Bonjour,\n\nVoici ma demande de devis pour un séminaire au Domaine de Persine.\n\n" + lignes.join("\n") + "\n\nMerci de me faire parvenir votre devis.\n";
+    var sujet = "Demande de devis séminaire" + (d["Entreprise"] ? " - " + d["Entreprise"][0] : "");
+    window.location.href = "mailto:contact@gitesvienne.fr?subject=" + encodeURIComponent(sujet) + "&body=" + encodeURIComponent(corps);
+  });
+})();
+</script>'''
+
 def theme_body(t):
     doms = {d["slug"]: d for d in DOMAINES}
     intro = "".join(f"<p>{E(x)}</p>" for x in t["intro"])
@@ -238,6 +296,16 @@ def theme_body(t):
     faq = "".join(f'<details class="faq__item"><summary>{E(q)}</summary><p>{E(r)}</p></details>' for q, r in t["faq"])
     others = "".join(f'<a class="btn btn--ghost" href="/{o["slug"]}/">{E(o["eyebrow"])}</a>' for o in THEMES if o["slug"] != t["slug"])
     cards = "".join(card(doms[s]) for s in t["domaines"])
+    photos = "".join(f'<figure><button type="button" class="ph" data-full="/img/{s}.jpg" data-cap="{E(c)}"><img src="/img/{s}-s.jpg" alt="{E(c)}" loading="lazy"></button><figcaption>{E(c)}</figcaption></figure>' for s, c in t.get("photos", []))
+    galerie = f'<section class="section" style="padding-top:0"><div class="wrap"><div class="galerie">{photos}</div></div></section>' if photos else ""
+    cartes = f'''<section class="section section--{t['famille']}" style="padding-top:0">
+  <div class="wrap">
+    <div class="cards cards--3">{cards}</div>
+  </div>
+</section>''' if cards else ""
+    devis = devis_form() if t.get("devis") else ""
+    actions = ('<a class="btn" href="#demande-devis">Demander un devis</a><a class="btn btn--ghost" href="#contact" data-ask="persine" data-mode="visite">Demander une visite</a><a class="btn btn--ghost" href="tel:' + PHONE_INTL + '">Appeler</a>') if t.get("devis") else \
+              '<a class="btn" href="/#disponibilites">Voir les dates libres</a><a class="btn btn--ghost" href="#contact" data-ask="" data-mode="visite">Demander une visite</a><a class="btn btn--ghost" href="#contact" data-ask="" data-mode="appel">Prendre rendez-vous téléphonique</a>'
     return f'''
 <section class="section section--{t['famille']} theme">
   <div class="wrap">
@@ -245,14 +313,10 @@ def theme_body(t):
     <h1 class="theme__h1">{t['h1']}</h1>
     <div class="theme__intro">{intro}</div>
     <ul class="theme__pts">{pts}</ul>
-    <div class="actions"><a class="btn" href="/#disponibilites">Voir les dates libres</a><a class="btn btn--ghost" href="#contact" data-ask="" data-mode="visite">Demander une visite</a><a class="btn btn--ghost" href="#contact" data-ask="" data-mode="appel">Prendre rendez-vous téléphonique</a></div>
+    <div class="actions">{actions}</div>
   </div>
 </section>
-<section class="section section--{t['famille']}" style="padding-top:0">
-  <div class="wrap">
-    <div class="cards cards--3">{cards}</div>
-  </div>
-</section>
+{galerie}{cartes}{devis}
 <section class="section faq" style="padding-top:0">
   <div class="wrap faq__wrap">
     <h2>Questions fréquentes</h2>

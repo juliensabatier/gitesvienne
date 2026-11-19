@@ -22,6 +22,7 @@ THEMES = [
     ],
     "domaines": ["persine", "montbeil", "borderie"],
     "faq": [
+      ("Combien d'invités pouvez-vous accueillir ?", "Le Domaine de Persine reçoit 150 convives assis et 180 en cocktail debout, le Château de Montbeil 80 assis et 100 debout, et le Château de la Borderie 120 assis et 115 debout."),
       ("Combien d'invités peuvent dormir sur place ?", "De 42 couchages au Domaine de Persine à 49 au Château de Montbeil et 93 au Château de la Borderie. Pour un grand mariage à Lusignan, le Clos de Mélior (12 personnes) et la Villa d'Elinas (14 personnes), à deux minutes de Persine, complètent l'hébergement."),
       ("Peut-on visiter avant de réserver ?", "Oui, et nous vous le conseillons. Contactez-nous ou demandez une visite depuis le formulaire pour fixer un rendez-vous."),
       ("Quels sont vos tarifs ?", "Les tarifs dépendent de la saison et de la formule choisie. Ils sont affichés sur la page de chaque domaine, et nous vous envoyons la plaquette détaillée sur simple demande."),

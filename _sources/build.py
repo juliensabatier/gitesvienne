@@ -184,7 +184,7 @@ def biz(d):
          "telephone": PHONE_INTL, "email": CONTACT_EMAIL, "address": adr,
          "containedInPlace": {"@type": "AdministrativeArea", "name": s["departement"]},
          "hasMap": avis_url(d["slug"])}
-    if s.get("convives"): b["maximumAttendeeCapacity"] = s["convives"]
+    if s.get("convives"): b["maximumAttendeeCapacity"] = max(s["convives"], s.get("debout", 0))
     if s.get("chambres"): b["numberOfRooms"] = s["chambres"]
     b["containsPlace"] = logement
     b["amenityFeature"] = [{"@type": "LocationFeatureSpecification", "name": e, "value": True} for e in s["equipements"]]
@@ -284,7 +284,7 @@ def faq_domaine(d):
     q = []
     if d["famille"] == "mariage":
         q.append((f"Combien d'invités peut-on recevoir au {nom} ?",
-                  f"Le {nom} reçoit jusqu'à {s['convives']} convives assis pour le repas et dispose de {s['couchages']} couchages sur place{" (24 au château, le reste au gîte et dans les chalets, en option)" if d["slug"] == "borderie" else " : vos invités dorment au domaine tout le week-end"}."))
+                  f"Le {nom} reçoit jusqu'à {s['convives']} convives assis pour le repas et {s['debout']} en cocktail debout, et dispose de {s['couchages']} couchages sur place{" (24 au château, le reste au gîte et dans les chalets, en option)" if d["slug"] == "borderie" else " : vos invités dorment au domaine tout le week-end"}."))
         q.append((f"Quel est le prix de location du {nom} pour un mariage ?",
                   f"La location démarre à {eur(lo)} {d['unite']} en {SAISON_NOM[order[0]].lower()} et va jusqu'à {eur(hi)} en haute saison ({d['periodes']['H'].lower()}). Formule : {d['formule'].lower()}. Le détail des saisons et des options figure dans le tableau des tarifs de cette page."))
         q.append((f"Peut-on choisir son traiteur au {nom} ?",
@@ -333,7 +333,7 @@ def tarifs_md():
         L += [f"## {d['nom']} · {d['lieu']}", "",
               f"- Page : {SITE}{PAGES[d['slug']][0]}",
               f"- Type : {'domaine de mariage et de réception' if d['famille'] == 'mariage' else 'gîte de groupe'}",
-              f"- Capacité : {s['couchages']} couchages" + (f", {s['convives']} convives assis" if s.get("convives") else ""),
+              f"- Capacité : {s['couchages']} couchages" + (f", {s['convives']} convives assis, {s['debout']} debout" if s.get("convives") else ""),
               f"- Formule : {d['formule']}", ""]
         order = [k for k in ["H", "M", "B", "C", "W"] if k in d["tarifs"]]
         L += ["| Saison | Période | Prix |", "|---|---|---|"]
@@ -355,7 +355,7 @@ def llms_txt():
          "## Les domaines", ""]
     for d in DOMAINES:
         s = SCHEMA[d["slug"]]
-        cap = f"{s['couchages']} couchages" + (f", {s['convives']} convives assis" if s.get("convives") else "")
+        cap = f"{s['couchages']} couchages" + (f", {s['convives']} convives assis, {s['debout']} en cocktail debout" if s.get("convives") else "")
         av = AVIS.get(d["slug"])
         note = f", note Google {av['note']}/5 ({av['nb']} avis)" if av else ""
         L.append(f"- [{d['nom']}]({SITE}{PAGES[d['slug']][0]}): {d['lieu']}. {d['accroche']} {cap}. {s['prix']}{note}.")

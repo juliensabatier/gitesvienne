@@ -7,7 +7,7 @@ Réservation et visites : Julien Sabatier, 06 18 70 82 19, contact@gitesvienne.f
 
 - Page : https://gitesvienne.fr/domaine-de-persine/
 - Type : domaine de mariage et de réception
-- Capacité : 42 couchages, 150 convives assis
+- Capacité : 42 couchages, 150 convives assis, 180 debout
 - Formule : Location du vendredi 18 h au dimanche 18 h
 
 | Saison | Période | Prix |
@@ -30,7 +30,7 @@ Plaquette complète (PDF) : https://gitesvienne.fr/plaquettes/plaquette-domaine-
 
 - Page : https://gitesvienne.fr/chateau-de-montbeil/
 - Type : domaine de mariage et de réception
-- Capacité : 49 couchages, 80 convives assis
+- Capacité : 49 couchages, 80 convives assis, 100 debout
 - Formule : Location du vendredi 18 h au dimanche 18 h
 
 | Saison | Période | Prix |
@@ -54,7 +54,7 @@ Plaquette complète (PDF) : https://gitesvienne.fr/plaquettes/plaquette-chateau-
 
 - Page : https://gitesvienne.fr/chateau-de-la-borderie/
 - Type : domaine de mariage et de réception
-- Capacité : 93 couchages, 120 convives assis
+- Capacité : 93 couchages, 120 convives assis, 115 debout
 - Formule : 2 nuits au château (24 couchages)
 
 | Saison | Période | Prix |

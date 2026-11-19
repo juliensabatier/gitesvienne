@@ -144,7 +144,12 @@ DOMAINES = [
     "photos": [("montbeil-01","La façade et sa fontaine"),("montbeil-02","La salle à manger aux lustres"),("montbeil-03","Le hall d'entrée"),
                ("montbeil-04","Le grand escalier"),("montbeil-05","Le salon"),("montbeil-06","Cérémonie laïque dans le parc"),
                ("montbeil-07","L'escalier vu d'en haut"),("montbeil-08","Une chambre"),("montbeil-09","Salle de bain et sa baignoire"),
-               ("montbeil-10","Chambre parentale")],
+               ("montbeil-10","Chambre parentale"),
+               ("montbeil-11","Les mariés dans l'escalier"),("montbeil-12",'Allée de cérémonie fleurie'),("montbeil-13",'La salle de réception dressée'),
+               ("montbeil-14","Le hall d'accueil des invités"),("montbeil-15",'Cérémonie laïque au coucher du soleil'),("montbeil-16",'Les préparatifs de la mariée'),
+               ("montbeil-17",'La façade du château'),("montbeil-18",'Dîner aux chandelles sous les lustres'),("montbeil-19",'La salle à manger dressée pour le mariage'),
+               ("montbeil-20",'Plan de table et photos des invités'),("montbeil-21",'La soirée dansante'),("montbeil-22","Fontaines d'étincelles pour les mariés"),
+               ("montbeil-23",'Le château vu du ciel'),("montbeil-24",'Le parc vu du ciel')],
   },
   {
     "slug": "borderie", "famille": "mariage",

@@ -1,6 +1,6 @@
 # Tarifs : Gîtes Vienne (gitesvienne.fr)
 
-Mis à jour le 16 novembre 2026. Prix en euros TTC, location du lieu entier. Disponibilités en temps réel sur chaque page du site.
+Mis à jour le 19 novembre 2026. Prix en euros TTC, location du lieu entier. Disponibilités en temps réel sur chaque page du site.
 Réservation et visites : Julien Sabatier, 06 18 70 82 19, contact@gitesvienne.fr.
 
 ## Domaine de Persine · Lusignan (86)

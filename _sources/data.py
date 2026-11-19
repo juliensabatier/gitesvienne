@@ -174,7 +174,10 @@ DOMAINES = [
     "photos": [("borderie-01","Le château dans son parc, vu du ciel"),("borderie-13","La piscine au pied du château"),("borderie-14","Première danse dans la salle de réception"),("borderie-15","Table dressée dans la salle de réception"),("borderie-02","La façade côté jardin"),("borderie-03","Le grand salon"),
                ("borderie-04","La petite salle à manger"),("borderie-05","Le salon boisé"),("borderie-06","Le hall et son escalier"),
                ("borderie-07","Une chambre du château"),("borderie-08","Le gîte"),("borderie-09","Les chalets à l'orée du parc"),
-               ("borderie-10","La cuisine traiteur"),("borderie-11","L'allée de tilleuls"),("borderie-12","L'arrivée au château")],
+               ("borderie-10","La cuisine traiteur"),("borderie-11","L'allée de tilleuls"),("borderie-12","L'arrivée au château"),
+               ("borderie-16","Vin d'honneur au bord de la piscine"),("borderie-17",'Cérémonie laïque devant le château'),("borderie-18",'Les mariés sous les arches de pierre'),("borderie-19","Cérémonie sous l'arche de fer forgé"),("borderie-20",'Le premier baiser des mariés'),
+               ("borderie-21",'Photo de groupe devant le château'),("borderie-22",'Les mariés au balcon'),("borderie-23",'Les préparatifs de la mariée'),("borderie-24","La mariée dans l'escalier du château"),("borderie-25","La mariée dans l'allée"),
+               ("borderie-26",'Le marié et ses témoins dans le salon'),("borderie-27",'Pause des invités dans le salon boisé'),("borderie-28",'Sortie de cérémonie dans le parc'),("borderie-29",'Ouverture de bal'),("borderie-30",'La soirée dansante')],
   },
   {
     "slug": "melior", "famille": "gite",

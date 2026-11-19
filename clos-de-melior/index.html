@@ -61,6 +61,9 @@ p{margin:0}
 .logo span{font-size:12px;color:var(--muted);letter-spacing:.06em}
 .nav{display:flex;gap:22px;font-size:14px}
 .nav a{text-decoration:none;color:var(--muted)}
+.nav a{white-space:nowrap}
+@media (max-width:1240px){.nav a[href$="#faq"],.nav a[data-mode="appel"]{display:none}}
+@media (max-width:1000px){.nav a[href$="#avis"],.nav a[href$="#disponibilites"]{display:none}}
 .nav a:hover{color:var(--ink)}
 @media (max-width:760px){.nav a:not(.nav__cta){display:none}.logo span{display:none}}
 .nav__cta{color:var(--accent)!important;font-weight:600}
@@ -371,7 +374,7 @@ body.lock{overflow:hidden}
   <div class="wrap">
     <a class="logo" href="/"><b>Gîtes Vienne</b><span>Lusignan · Poitou</span></a>
     <nav class="nav" aria-label="Navigation principale">
-      <a href="/#mariages">Mariages</a><a href="/#week-ends">Week-ends</a><a href="/#avis">Avis</a><a href="/#disponibilites">Disponibilités</a><a href="/#faq">Questions</a><a href="#contact" data-ask="" data-mode="appel">Rendez-vous</a><a href="#contact" data-ask="" data-mode="visite">Visiter</a><a class="nav__cta" href="#contact" data-ask="" data-mode="date">Demander une date</a>
+      <a href="/#mariages">Domaines de mariage</a><a href="/#week-ends">Gîtes</a><a href="/seminaire-poitiers/">Séminaires</a><a href="/#avis">Avis</a><a href="/#disponibilites">Disponibilités</a><a href="/#faq">Questions</a><a href="#contact" data-ask="" data-mode="appel">Rendez-vous</a><a href="#contact" data-ask="" data-mode="visite">Visiter</a><a class="nav__cta" href="#contact" data-ask="" data-mode="date">Demander une date</a>
     </nav>
   </div>
 </header>
@@ -379,7 +382,7 @@ body.lock{overflow:hidden}
 <main id="accueil">
 
 <section class="fiche fiche--gite fiche--page" id="fiche-melior" data-slug="melior" aria-labelledby="t-melior">
-  <div class="fiche__bar"><a class="back" href="/#mariages">← Tous les domaines</a><span class="fiche__fam">Week-ends et vacances</span>
+  <div class="fiche__bar"><a class="back" href="/#mariages">← Tous les domaines</a><span class="fiche__fam">Gîtes</span>
     <span class="fiche__acts"><a class="btn btn--sm" href="/?d=melior&amp;m=date#contact" data-ask="melior" data-mode="date">Demander une date</a></span></div>
   <header class="fiche__hero">
     <img src="/img/melior-card.jpg" alt="Le Clos de Mélior">
@@ -481,7 +484,7 @@ body.lock{overflow:hidden}
 <footer>
   <div class="wrap">
     <div><a class="logo" href="/"><b>Gîtes Vienne</b></a><p style="margin-top:10px">Domaines de mariage et gîtes autour de Lusignan, dans la Vienne et en Charente.</p></div>
-    <div><p class="eyebrow" style="margin-bottom:10px">Nos guides</p><ul><li><a href="/gite-mariage-vienne/">Mariage dans la Vienne</a></li><li><a href="/gite-de-groupe-poitiers/">Gîte de groupe dans la Vienne</a></li><li><a href="/seminaire-anniversaire-vienne/">Séminaires et fêtes de famille</a></li></ul></div>
+    <div><p class="eyebrow" style="margin-bottom:10px">Nos guides</p><ul><li><a href="/gite-mariage-vienne/">Mariage dans la Vienne</a></li><li><a href="/gite-de-groupe-poitiers/">Gîte de groupe dans la Vienne</a></li><li><a href="/seminaire-poitiers/">Séminaires</a></li><li><a href="/seminaire-anniversaire-vienne/">Anniversaires et fêtes de famille</a></li></ul></div>
     <div><p class="eyebrow" style="margin-bottom:10px">Les sites des domaines</p><ul><li><a href="https://www.domainedepersine.fr" target="_blank" rel="noopener">Domaine de Persine</a></li><li><a href="https://www.chateaudemontbeil.com" target="_blank" rel="noopener">Château de Montbeil</a></li><li><a href="https://www.chateaudelaborderie.com/fr/" target="_blank" rel="noopener">Château de la Borderie</a></li><li><a href="https://larenaissancemelusine.systeme.io/contact-melior" target="_blank" rel="noopener">Le Clos de Mélior</a></li><li><a href="https://elinasvilla.systeme.io/contact" target="_blank" rel="noopener">La Villa d&#x27;Elinas</a></li></ul></div>
     <div><p class="eyebrow" style="margin-bottom:10px">Contact</p><ul><li>contact@gitesvienne.fr</li><li>06 18 70 82 19</li><li><a href="#mentions" data-mentions>Mentions légales</a></li></ul></div>
   </div>

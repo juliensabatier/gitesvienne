@@ -21,7 +21,7 @@ def link(slug):
     return "#" + slug if PREVIEW else PAGES[slug][0]
 
 def card(d):
-    tag = "Mariages et réceptions" if d["famille"] == "mariage" else "Week-ends et vacances"
+    tag = "Domaines de mariage" if d["famille"] == "mariage" else "Gîtes"
     chiffres = "".join(f'<li><b>{E(v)}</b><span>{E(l)}</span></li>' for v, l in d["chiffres"])
     prefix = "à partir de " if d["famille"] == "mariage" or True else ""
     return f'''
@@ -131,7 +131,7 @@ def fiche(d):
     photos = "".join(
         f'<figure><button type="button" class="ph" data-full="img/{p}.jpg" data-cap="{E(c)}"><img src="img/{p}-s.jpg" alt="{E(c)}" loading="lazy"></button><figcaption>{E(c)}</figcaption></figure>'
         for p, c in d["photos"])
-    fam = "Mariages et réceptions" if d["famille"] == "mariage" else "Week-ends et vacances"
+    fam = "Domaines de mariage" if d["famille"] == "mariage" else "Gîtes"
     return f'''
 <section class="fiche fiche--{d['famille']}" id="fiche-{d['slug']}" data-slug="{d['slug']}" hidden aria-labelledby="t-{d['slug']}">
   <div class="fiche__bar"><a class="back" href="#domaines">← Tous les domaines</a><span class="fiche__fam">{fam}</span>

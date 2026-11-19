@@ -68,7 +68,7 @@ THEMES = [
     "slug": "seminaire-poitiers",
     "famille": "mariage",
     "title": "Séminaire près de Poitiers avec hébergement | Domaine de Persine, Lusignan (Vienne)",
-    "desc": "Lieu de séminaire entre Poitiers et Niort : le Domaine de Persine à Lusignan accueille de 10 à 200 personnes, salle de 180 m², bar, 10 chambres (40 couchages), parc d'un hectare, gare en face. Devis sur mesure.",
+    "desc": "Lieu de séminaire entre Poitiers et Niort : le Domaine de Persine à Lusignan accueille de 10 à 200 personnes, salle de 180 m², bar, 10 chambres (20 lits individuels), parc d'un hectare, gare en face. Devis sur mesure.",
     "eyebrow": "Séminaires",
     "h1": "Votre séminaire près de Poitiers, <i>au Domaine de Persine</i>",
     "intro": [
@@ -79,7 +79,7 @@ THEMES = [
     "points": [
       ("De 10 à 200 personnes", "Jusqu'à 90 personnes en réunion, 120 au dîner assis et 200 en cocktail, sur 550 m² d'espaces."),
       ("Séminaire à la journée", "Accueil et pauses café au bar, réunion dans la grande salle, déjeuner sur place grâce à la cuisine traiteur."),
-      ("Séminaire résidentiel", "10 chambres, soit 40 couchages, pour prolonger vos travaux et vos échanges sur deux jours ou plus."),
+      ("Séminaire résidentiel", "10 chambres et 20 lits : jusqu'à 20 participants hébergés sur place, une personne par lit, pour prolonger vos travaux sur deux jours ou plus."),
       ("Équipements", "Wi-Fi, vidéoprojecteur, écran TV, paperboard sur demande, tables et chaises, parking privatif."),
       ("Venir en train", "La gare de Lusignan est juste en face du domaine : vos équipes arrivent sans voiture."),
       ("Devis sur mesure", "Pas de forfait imposé : décrivez vos besoins ci-dessous et vous recevez un devis détaillé pour votre entreprise."),
@@ -89,7 +89,7 @@ THEMES = [
     "devis": True,
     "domaines": [],
     "faq": [
-      ("Combien de personnes peut-on accueillir pour un séminaire ?", "De 10 à 200 personnes : jusqu'à 90 en réunion, 120 au dîner assis et 200 en cocktail. Pour un séminaire résidentiel, le domaine compte 10 chambres, soit 40 couchages."),
+      ("Combien de personnes peut-on accueillir pour un séminaire ?", "De 10 à 200 personnes : jusqu'à 90 en réunion, 120 au dîner assis et 200 en cocktail. Pour un séminaire résidentiel, le domaine compte 10 chambres et 20 lits : jusqu'à 20 participants dorment sur place, chacun dans son lit."),
       ("Quel matériel est disponible pour les réunions ?", "Wi-Fi, vidéoprojecteur, écran TV, paperboard sur demande, ainsi que les tables et les chaises."),
       ("Où se déroulent les pauses et les repas ?", "L'accueil et les pauses café se font au bar de 35 m², les repas dans la salle de réception de 180 m² ou sur la terrasse. La cuisine aménagée est à disposition du traiteur de votre choix."),
       ("Quel est le prix d'un séminaire ?", "Chaque séminaire fait l'objet d'un devis sur mesure, selon le nombre de participants, la durée, la restauration et l'hébergement. Remplissez le formulaire de demande de devis : vous recevez une proposition détaillée."),

@@ -304,7 +304,7 @@ def theme_body(t):
   </div>
 </section>''' if cards else ""
     devis = devis_form() if t.get("devis") else ""
-    actions = ('<a class="btn" href="#demande-devis">Demander un devis</a><a class="btn btn--ghost" href="#contact" data-ask="persine" data-mode="visite">Demander une visite</a><a class="btn btn--ghost" href="tel:' + PHONE_INTL + '">Appeler</a>') if t.get("devis") else \
+    actions = ('<a class="btn" href="#demande-devis">Demander un devis</a><a class="btn btn--ghost" href="#contact" data-ask="persine" data-mode="visite">Demander une visite</a><a class="btn btn--ghost" href="tel:' + PHONE_INTL + '">Appeler</a><a class="btn btn--ghost" href="/plaquettes/plaquette-seminaire-domaine-de-persine.pdf" target="_blank" rel="noopener">Télécharger la plaquette</a>') if t.get("devis") else \
               '<a class="btn" href="/#disponibilites">Voir les dates libres</a><a class="btn btn--ghost" href="#contact" data-ask="" data-mode="visite">Demander une visite</a><a class="btn btn--ghost" href="#contact" data-ask="" data-mode="appel">Prendre rendez-vous téléphonique</a>'
     return f'''
 <section class="section section--{t['famille']} theme">

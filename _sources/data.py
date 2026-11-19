@@ -235,7 +235,7 @@ DOMAINES = [
                ("elinas-11","La Villa d'Elinas en un coup d'œil"),("elinas-12",'La terrasse en bois et la piscine'),("elinas-13",'La villa et son jardin au cœur de Lusignan'),
                ("elinas-14",'Chambre familiale sous les toits'),("elinas-15",'Chambre de quatre sous les poutres'),("elinas-16",'Grande chambre avec coin salon'),
                ("elinas-17",'Chambre à la cheminée'),("elinas-18",'Chambre lumineuse sur le jardin'),("elinas-19",'Chambre au tableau zèbre'),
-               ("elinas-20",'Salle de bain avec douche et baignoire'),("elinas-21",'Salle de bain ouverte sur la chambre'),("elinas-22",'Salle de bain en pierre apparente'),
+               ("elinas-31",'Salle de bain avec douche et baignoire'),("elinas-22",'Salle de bain en pierre apparente'),
                ("elinas-23",'Chambre double colorée'),("elinas-24",'La salle de sport'),("elinas-25",'Le baby-foot'),
                ("elinas-26",'Petit salon à la cheminée'),("elinas-27",'La cuisine et la grande table'),("elinas-28",'Le salon et sa bibliothèque'),
                ("elinas-29",'Le billard dans la grande salle'),("elinas-30",'Le piano à queue')],

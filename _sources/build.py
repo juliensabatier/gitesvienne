@@ -157,6 +157,7 @@ def fiche(d):
         <a class="btn btn--ghost btn--block" href="{maps_url(d['slug'])}" target="_blank" rel="noopener">Calculer mon trajet (Google Maps) ↗</a>
         <p><a class="lien" href="{d['site']}" target="_blank" rel="noopener">Voir le site du domaine ↗</a></p></div>
       {('<a class="btn btn--block btn--ghost" href="#contact" data-ask="'+d['slug']+'" data-mode="visite">Demander une visite</a>') if d['famille']=='mariage' else ''}
+      <a class="btn btn--block btn--ghost" href="#contact" data-ask="{d['slug']}" data-mode="appel">Prendre rendez-vous téléphonique</a>
       <a class="btn btn--block" href="#contact" data-ask="{d['slug']}" data-mode="date">Demander une date</a>
     </aside>
   </div>
@@ -244,7 +245,7 @@ def theme_body(t):
     <h1 class="theme__h1">{t['h1']}</h1>
     <div class="theme__intro">{intro}</div>
     <ul class="theme__pts">{pts}</ul>
-    <div class="actions"><a class="btn" href="/#disponibilites">Voir les dates libres</a><a class="btn btn--ghost" href="#contact" data-ask="" data-mode="visite">Demander une visite</a></div>
+    <div class="actions"><a class="btn" href="/#disponibilites">Voir les dates libres</a><a class="btn btn--ghost" href="#contact" data-ask="" data-mode="visite">Demander une visite</a><a class="btn btn--ghost" href="#contact" data-ask="" data-mode="appel">Prendre rendez-vous téléphonique</a></div>
   </div>
 </section>
 <section class="section section--{t['famille']}" style="padding-top:0">
@@ -433,7 +434,7 @@ else:
         page = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{E(d["nom"])}">', page, count=1)
         # chemins absolus
         page = re.sub(r'(?<=[\s"(,])(img|plaquettes)/', r'/\1/', page)
-        page = page.replace('fetch("ical.php"', 'fetch("/ical.php"').replace('fetch("contact.php"', 'fetch("/contact.php"')
+        page = page.replace('fetch("ical.php"', 'fetch("/ical.php"').replace('fetch("contact.php"', 'fetch("/contact.php"').replace('fetch("rdv.php"', 'fetch("/rdv.php"')
         page = page.replace('href="#accueil"', 'href="/"').replace('href="#mariages"', 'href="/#mariages"').replace('href="#week-ends"', 'href="/#week-ends"').replace('href="#avis"', 'href="/#avis"').replace('href="#disponibilites"', 'href="/#disponibilites"').replace('href="#faq"', 'href="/#faq"')
         write(os.path.join(ROOT, url.strip("/"), "index.html"), wrap(page, "/img/favicon.png"))
     for t in THEMES:
@@ -448,7 +449,7 @@ else:
         page = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{E(t["title"])}">', page, count=1)
         page = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{E(t["desc"])}">', page, count=1)
         page = re.sub(r'(?<=[\s"(,])(img|plaquettes)/', r'/\1/', page)
-        page = page.replace('fetch("ical.php"', 'fetch("/ical.php"').replace('fetch("contact.php"', 'fetch("/contact.php"')
+        page = page.replace('fetch("ical.php"', 'fetch("/ical.php"').replace('fetch("contact.php"', 'fetch("/contact.php"').replace('fetch("rdv.php"', 'fetch("/rdv.php"')
         page = page.replace('href="#accueil"', 'href="/"').replace('href="#mariages"', 'href="/#mariages"').replace('href="#week-ends"', 'href="/#week-ends"').replace('href="#avis"', 'href="/#avis"').replace('href="#disponibilites"', 'href="/#disponibilites"').replace('href="#faq"', 'href="/#faq"')
         write(os.path.join(ROOT, t["slug"], "index.html"), wrap(page, "/img/favicon.png"))
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',

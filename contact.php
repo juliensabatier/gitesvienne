@@ -48,7 +48,7 @@ $hits = is_file($f) ? array_filter(explode(',', file_get_contents($f)), function
 if (count($hits) >= 5) fail('Trop de demandes, merci de réessayer plus tard.', 429);
 $hits[] = time(); @file_put_contents($f, implode(',', $hits));
 
-$objet = clean('objet', 10) === 'visite' ? 'visite' : 'date';
+$objet = in_array(clean('objet', 10), ['visite', 'appel'], true) ? clean('objet', 10) : 'date';
 $nom = clean('nom'); $email = clean('email'); $tel = clean('tel', 40);
 $dom = clean('domaine', 20); $type = clean('type', 40);
 $arr = clean('arrivee', 10); $dep = clean('depart', 10);
@@ -61,6 +61,82 @@ if ($nom === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) fail('Nom ou e-ma
 $fr = function ($d) { return preg_match('/^\d{4}-\d{2}-\d{2}$/', $d) ? date('d/m/Y', strtotime($d)) : ''; };
 $D = $DOMAINES[$dom] ?? null;
 $domNom = $D ? $D['nom'] : 'Non précisé';
+
+/* ---------- Rendez-vous téléphonique de 15 minutes ---------- */
+if ($objet === 'appel') {
+    date_default_timezone_set('Europe/Paris');
+    $rd = clean('rdv_date', 10); $rh = clean('rdv_heure', 5);
+    if ($tel === '') fail('Merci d\'indiquer votre numéro de téléphone.');
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $rd) || !preg_match('/^(\d{2}):(00|15|30|45)$/', $rh, $hm)) fail('Merci de choisir le jour et l\'heure du rendez-vous.');
+    $h = (int)$hm[1];
+    if ($h < 9 || $h > 19) fail('Les rendez-vous sont possibles de 9 h à 20 h.');
+    $t = strtotime("$rd $rh:00");
+    if ($t === false || $t < time() + 30 * 60 || $t > time() + 62 * 86400) fail('Ce créneau n\'est plus disponible, merci d\'en choisir un autre.');
+    $slot = "$rd $rh";
+    // Enregistrement du créneau (verrou pour éviter deux réservations simultanées)
+    $rf = $dir . '/rdv.json';
+    $fh = fopen($rf, 'c+');
+    if (!$fh) fail("L'envoi a échoué.", 500);
+    flock($fh, LOCK_EX);
+    $all = json_decode(stream_get_contents($fh), true) ?: [];
+    if (isset($all[$slot])) { flock($fh, LOCK_UN); fclose($fh); fail('Ce créneau vient d\'être réservé, merci d\'en choisir un autre.', 409); }
+    $lim = date('Y-m-d H:i', time() - 7 * 86400);
+    foreach ($all as $k => $v) if ($k < $lim) unset($all[$k]);
+    $all[$slot] = ['nom' => $nom, 'tel' => $tel, 'email' => $email, 'le' => date('Y-m-d H:i')];
+    ksort($all);
+    ftruncate($fh, 0); rewind($fh); fwrite($fh, json_encode($all, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    fflush($fh); flock($fh, LOCK_UN); fclose($fh);
+
+    $JOURS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+    $MOIS = ['', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+    $quand = $JOURS[(int)date('w', $t)] . ' ' . (int)date('j', $t) . ' ' . $MOIS[(int)date('n', $t)] . ' à ' . str_replace(':', ' h ', $rh);
+    $fin = $t + 15 * 60;
+    $gcal = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+          . '&text=' . rawurlencode("Appel $nom ($tel)")
+          . '&dates=' . date('Ymd\THis', $t) . '/' . date('Ymd\THis', $fin) . '&ctz=Europe/Paris'
+          . '&details=' . rawurlencode("Rendez-vous téléphonique pris sur gitesvienne.fr\nDomaine : $domNom\nType : $type\nTéléphone : $tel\nE-mail : $email" . ($message ? "\n\nMessage : $message" : ''));
+    $body = "Nouveau rendez-vous téléphonique pris sur gitesvienne.fr\n\n"
+          . "QUAND : " . ucfirst($quand) . " (15 minutes)\nAPPELER : $nom au $tel\n\n"
+          . "Ajouter à mon agenda (Google Agenda) :\n$gcal\n\n"
+          . "Domaine : $domNom\nType : $type\nDate de l'événement : " . ($fr($arr) ?: '-') . ($fr($dep) ? ' au ' . $fr($dep) : '') . "\n"
+          . "Invités : " . ($nb ?: '-') . "\nCouchages : " . ($couch ?: '-') . "\n\nE-mail : $email\n\nMessage :\n" . ($message ?: '-') . "\n\n"
+          . "Si ce créneau ne vous convient pas, rappelez le client pour en proposer un autre.\n"
+          . "(Une confirmation a été envoyée automatiquement au client.)\n";
+    $sujet = "RDV téléphonique " . date('d/m', $t) . " à " . str_replace(':', 'h', $rh) . " - $nom";
+
+    // 1. Notification à Julien : Brevo via Make (sans présentation automatique), secours par le serveur
+    $okMake = false;
+    if (function_exists('curl_init')) {
+        $ch = curl_init('https://hook.eu1.make.com/mirb58ifkyinqffw2iarovve3gcv83ad');
+        curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 10,
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+            CURLOPT_POSTFIELDS => json_encode(['cle' => 'gv-7Rk2pQx9', 'objet' => 'appel', 'domaine' => $dom, 'nom' => $nom, 'email' => $email,
+                                               'notif_sujet' => $sujet, 'notif_texte' => $body, 'presentation' => 'non'])]);
+        curl_exec($ch);
+        $okMake = curl_getinfo($ch, CURLINFO_HTTP_CODE) === 200;
+        curl_close($ch);
+    }
+    if (!$okMake) {
+        $headers = "From: " . enc('Gîtes Vienne') . " <$FROM>\r\nReply-To: " . enc($nom) . " <$email>\r\nMIME-Version: 1.0\r\n"
+                 . "Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: quoted-printable\r\n";
+        $okMake = @mail($DEST, enc($sujet), quoted_printable_encode($body), $headers, '-f' . $FROM);
+    }
+    journal("appel $slot $email : " . ($okMake ? 'ok' : 'ECHEC'));
+
+    // 2. Confirmation au client
+    $corps = "Bonjour $nom,\n\nVotre rendez-vous téléphonique est bien noté : je vous appellerai le $quand, au $tel, "
+           . "pour un échange d'environ 15 minutes sur votre projet.\n\n"
+           . "Si cet horaire ne m'était finalement pas possible, je vous rappellerai pour vous proposer un autre créneau. "
+           . "Vous pouvez aussi répondre à ce message pour le modifier.\n\n"
+           . "En attendant, les photos, les tarifs et les dates libres de nos domaines sont sur notre site :\n$SITE/" . ($PAGES[$dom] ?? '') . "\n\n"
+           . "À très bientôt,\n\n" . $SIGNATURE . "\n";
+    $hC = "From: " . enc('Julien Sabatier, Gîtes Vienne') . " <$FROM>\r\nReply-To: $FROM\r\nAuto-Submitted: auto-replied\r\nMIME-Version: 1.0\r\n"
+        . "Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: quoted-printable\r\n";
+    $ok2 = @mail($email, enc("Votre rendez-vous téléphonique du " . date('d/m', $t) . " à " . str_replace(':', ' h ', $rh)), quoted_printable_encode($corps), $hC, '-f' . $FROM);
+    journal("confirmation appel -> $email : " . ($ok2 ? 'ok' : 'ECHEC'));
+
+    echo json_encode(['ok' => true]); exit;
+}
 
 /* ---------- 1. Message pour vous ---------- */
 $lignes = ($objet === 'visite')

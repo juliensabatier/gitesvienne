@@ -42,3 +42,10 @@ CONTENU DU ZIP
 6. MODIFIER UN TEXTE OU UN TARIF
    - Tous les textes et tarifs sont dans sources/build/data.py.
    - Le plus simple : demandez-moi la modification, je vous renvoie un index.html à jour à remplacer sur le serveur.
+
+7. LES RENDEZ-VOUS TÉLÉPHONIQUES (15 MIN)
+   - Le formulaire propose un 3e choix « Être appelé (15 min) » : le visiteur choisit un jour et une heure,
+     tous les jours de 9 h à 20 h, par créneaux de 15 minutes (jusqu'à 2 mois à l'avance, au moins 1 h à l'avance).
+   - Vous recevez un e-mail « RDV téléphonique » avec un lien pour l'ajouter à votre agenda, et le client reçoit une confirmation.
+   - Un créneau réservé n'est plus proposé aux autres visiteurs (liste dans cache/rdv.json sur le serveur, non publique).
+   - Si le créneau ne vous convient pas, rappelez simplement le client pour en proposer un autre.

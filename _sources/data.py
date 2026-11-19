@@ -231,7 +231,14 @@ DOMAINES = [
     "unite": "le week-end",
     "photos": [("elinas-01","Cuisine ouverte et salle à manger"),("elinas-02","Le salon, son billard et son piano"),("elinas-10","La piscine chauffée et la terrasse"),
                ("elinas-04","La chambre violette"),("elinas-05","Chambre sous les poutres"),("elinas-06","Chambre à la girafe"),
-               ("elinas-07","La salle de fitness"),("elinas-08","Le baby-foot"),("elinas-09","Salle de bain avec douche et baignoire")],
+               ("elinas-07","La salle de fitness"),("elinas-08","Le baby-foot"),("elinas-09","Salle de bain avec douche et baignoire"),
+               ("elinas-11","La Villa d'Elinas en un coup d'œil"),("elinas-12",'La terrasse en bois et la piscine'),("elinas-13",'La villa et son jardin au cœur de Lusignan'),
+               ("elinas-14",'Chambre familiale sous les toits'),("elinas-15",'Chambre de quatre sous les poutres'),("elinas-16",'Grande chambre avec coin salon'),
+               ("elinas-17",'Chambre à la cheminée'),("elinas-18",'Chambre lumineuse sur le jardin'),("elinas-19",'Chambre au tableau zèbre'),
+               ("elinas-20",'Salle de bain avec douche et baignoire'),("elinas-21",'Salle de bain ouverte sur la chambre'),("elinas-22",'Salle de bain en pierre apparente'),
+               ("elinas-23",'Chambre double colorée'),("elinas-24",'La salle de sport'),("elinas-25",'Le baby-foot'),
+               ("elinas-26",'Petit salon à la cheminée'),("elinas-27",'La cuisine et la grande table'),("elinas-28",'Le salon et sa bibliothèque'),
+               ("elinas-29",'Le billard dans la grande salle'),("elinas-30",'Le piano à queue')],
   },
 ]
 

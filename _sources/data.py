@@ -213,6 +213,7 @@ DOMAINES = [
     "nom": "La Villa d'Elinas", "court": "Elinas",
     "lieu": "Lusignan (86)", "adresse": "Hauteurs de Lusignan, 86600",
     "site": "https://elinasvilla.systeme.io/contact",
+    "video": ("Y-N-dB9my98", "La Villa d'Elinas en vidéo"),
     "accroche": "Une grande maison de famille avec piscine chauffée, billard, baby-foot et salle de fitness.",
     "chiffres": [("14", "couchages"), ("6", "chambres"), ("4", "salles de bain"), ("chauffée", "piscine")],
     "texte": [

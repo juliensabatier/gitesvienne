@@ -124,6 +124,15 @@ def tarif_table(d):
     return f'''<h3>Tarifs</h3><p class="formule">{E(d['formule'])}</p>
 <table class="tarifs">{rows}</table>{note}{opts}'''
 
+def video_block(d):
+    if not d.get("video"):
+        return ""
+    vid, titre = d["video"]
+    return (f'<h3>{E(titre)}</h3><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" '
+            f'title="{E(titre)}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" '
+            f'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'
+            f'<p class="hint"><a class="lien" href="https://www.youtube.com/watch?v={vid}" target="_blank" rel="noopener">Voir la vidéo sur YouTube ↗</a></p>')
+
 def fiche(d):
     chiffres = "".join(f'<li><b>{E(v)}</b><span>{E(l)}</span></li>' for v, l in d["chiffres"])
     texte = "".join(f"<p>{E(p)}</p>" for p in d["texte"])
@@ -145,6 +154,7 @@ def fiche(d):
       <ul class="chiffres chiffres--lg">{chiffres}</ul>
       <div class="prose">{texte}</div>
       <div class="galerie">{photos}</div>
+      {video_block(d)}
       <h3>Disponibilités</h3>
       <p class="hint">Les jours barrés sont déjà réservés. Touchez une date d'arrivée puis une date de départ.</p>
       <div class="cal" data-cal="{d['slug']}"></div>

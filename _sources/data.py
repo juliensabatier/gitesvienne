@@ -157,6 +157,7 @@ DOMAINES = [
     "nom": "Château de la Borderie", "court": "La Borderie",
     "lieu": "Benest, Charente (16)", "adresse": "Château de la Borderie, 16350 Benest",
     "site": "https://www.chateaudelaborderie.com/fr/",
+    "video": ("gbYcgNVDSHw", "Le Château de la Borderie en vidéo"),
     "accroche": "Un château privatisé au cœur d'un parc de 19 hectares, avec sa piscine, son gîte et ses chalets.",
     "chiffres": [("120", "convives assis"), ("93", "couchages"), ("140 m²", "salle de réception"), ("19 ha", "de parc")],
     "texte": [

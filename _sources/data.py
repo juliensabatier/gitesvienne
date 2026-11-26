@@ -189,6 +189,7 @@ DOMAINES = [
     "nom": "Le Clos de Mélior", "court": "Mélior",
     "lieu": "Lusignan (86)", "adresse": "Bourg médiéval de Lusignan, 86600",
     "site": "https://larenaissancemelusine.systeme.io/contact-melior",
+    "video": ("eSGlfjqKfh8", "Le Clos de Mélior en vidéo"),
     "accroche": "Une demeure du XVe siècle sur les hauteurs de Lusignan, sa grande cheminée et sa piscine chauffée.",
     "chiffres": [("12", "couchages"), ("4", "chambres"), ("chauffée", "piscine"), ("20 min", "du Futuroscope")],
     "texte": [

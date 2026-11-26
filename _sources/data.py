@@ -88,6 +88,7 @@ DOMAINES = [
     "nom": "Domaine de Persine", "court": "Persine",
     "lieu": "Lusignan (86)", "adresse": "3 rue de la Roche Grolleau, 86600 Lusignan",
     "site": "https://www.domainedepersine.fr",
+    "video": (["yQVq0ZTBNVk", "LnCadNd_wV4"], "Le Domaine de Persine en vidéo"),
     "accroche": "L'ancien bistrot du village, restauré dans un esprit chic et champêtre, avec son parc clos d'un hectare.",
     "chiffres": [("150", "convives assis"), ("42", "couchages"), ("180 m²", "salle climatisée"), ("1 ha", "parc clos")],
     "texte": [

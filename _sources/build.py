@@ -127,11 +127,16 @@ def tarif_table(d):
 def video_block(d):
     if not d.get("video"):
         return ""
-    vid, titre = d["video"]
-    return (f'<h3>{E(titre)}</h3><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" '
-            f'title="{E(titre)}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" '
-            f'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'
-            f'<p class="hint"><a class="lien" href="https://www.youtube.com/watch?v={vid}" target="_blank" rel="noopener">Voir la vidéo sur YouTube ↗</a></p>')
+    ids, titre = d["video"]
+    ids = [ids] if isinstance(ids, str) else ids
+    out = f'<h3>{E(titre)}</h3>'
+    for i, vid in enumerate(ids, 1):
+        t = titre if len(ids) == 1 else f"{titre} ({i}/{len(ids)})"
+        out += (f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" '
+                f'title="{E(t)}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" '
+                f'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>'
+                f'<p class="hint"><a class="lien" href="https://www.youtube.com/watch?v={vid}" target="_blank" rel="noopener">Voir la vidéo sur YouTube ↗</a></p>')
+    return out
 
 def fiche(d):
     chiffres = "".join(f'<li><b>{E(v)}</b><span>{E(l)}</span></li>' for v, l in d["chiffres"])

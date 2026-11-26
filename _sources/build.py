@@ -102,7 +102,7 @@ def conseiller(slug="", compact=False):
       <p class="cons__nom">{E(full)}</p><p class="cons__desc">{E(c['texte'])}</p>
       <p class="cons__coord">{E(CONTACT_EMAIL)} · {E(PHONE)}</p>{btns}</div></div>'''
 
-HERO = [("borderie-card","borderie"),("montbeil-01","montbeil"),("persine-01","persine"),("melior-card","melior"),("borderie-13","borderie"),("elinas-card","elinas"),("montbeil-card","montbeil")]
+HERO = [("borderie-card","borderie"),("montbeil-01","montbeil"),("persine-hero","persine"),("melior-card","melior"),("borderie-13","borderie"),("elinas-card","elinas"),("montbeil-card","montbeil")]
 def slides():
     noms = {d["slug"]: d["nom"] for d in DOMAINES}
     out = []
